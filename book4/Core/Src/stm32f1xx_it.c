@@ -22,6 +22,7 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -219,11 +220,23 @@ void DMA1_Channel1_IRQHandler(void)
 void TIM1_UP_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-
+#if 0
   /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_UP_IRQn 1 */
+#else
 
+  if( __HAL_TIM_GET_FLAG( &htim1, TIM_FLAG_UPDATE ) != RESET )
+  {
+      __HAL_TIM_CLEAR_IT( &htim1, TIM_IT_UPDATE);
+			PidCurrent.Fbk = getCurrent()/4095.0f;
+			updatePID(&PidCurrent);
+
+			__HAL_TIM_SET_COMPARE( &htim1,TIM_CHANNEL_1,PidCurrent.Out*1000 );
+
+  }
+
+#endif
   /* USER CODE END TIM1_UP_IRQn 1 */
 }
 

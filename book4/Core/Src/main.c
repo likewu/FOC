@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "pid.h"
+#include "visualscope.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -74,7 +75,7 @@ static void MX_TIM1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint8_t tx[10];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -101,6 +102,25 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
+  // 开始ADC转换
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adcTemp, 32 );
+
+  // 开启定时器1 PWM通道1和2
+  HAL_TIM_PWM_Start( &htim1,TIM_CHANNEL_1 );
+  HAL_TIM_PWM_Start( &htim1,TIM_CHANNEL_2 );
+  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_10,GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOC,GPIO_PIN_11,GPIO_PIN_SET);
+
+  __HAL_TIM_SET_COMPARE( &htim1,TIM_CHANNEL_2,0 );
+
+  PidCurrent.Kp = 0.8;
+  PidCurrent.Ki = 4;
+  PidCurrent.Kd = 0.001;
+
+  PidCurrent.Ref = 50/4095.0f;
+
+  // 电流环在 TIM1_UP_IRQHandler 中断中执行
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -110,6 +130,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    *(uint16_t *)tx = PidCurrent.Ref*4095;
+    *(uint16_t *)(tx+2) = PidCurrent.Fbk*4095;
+    *(uint16_t *)(tx+4) = PidCurrent.Out*1000;
+    CRC16( tx, tx+8, 8 );
+    HAL_UART_Transmit(&huart2,tx,10,10);
+    HAL_Delay(2);
   }
   /* USER CODE END 3 */
 }
