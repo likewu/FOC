@@ -57,7 +57,7 @@ extern DMA_HandleTypeDef hdma_adc1;
 /* USER CODE END ExternalFunctions */
 
 /* USER CODE BEGIN 0 */
-
+uint16_t adcTemp[32];
 /* USER CODE END 0 */
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -302,5 +302,18 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 }
 
 /* USER CODE BEGIN 1 */
+uint16_t getCurrent( void )
+{
+	uint8_t i;
+	uint32_t sum = 0;
+	for( i = 0; i<32; i++ )
+	{
+		sum += adcTemp[i];
+	}
+	sum >>= 5;
 
+	return sum;
+
+
+}
 /* USER CODE END 1 */
