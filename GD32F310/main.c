@@ -39,7 +39,7 @@ OF SUCH DAMAGE.
 #include "systick.h"
 #include <stdio.h>
 #include "main.h"
-#include "gd32f350r_eval.h"
+//#include "gd32f350r_eval.h"
 
 /*!
     \brief      toggle the led every 500ms

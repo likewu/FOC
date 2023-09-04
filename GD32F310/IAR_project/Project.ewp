@@ -16,19 +16,19 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>GD32F330\BrowseInfo</state>
+                    <state>GD32F310\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>GD32F330\Exe</state>
+                    <state>GD32F310\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>GD32F330\Obj</state>
+                    <state>GD32F310\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>GD32F330\List</state>
+                    <state>GD32F310\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -74,7 +74,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>GD32F330xB	GD GD32F330xB</state>
+                    <state>GD32F310x8	GD GD32F310x8</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -120,17 +120,17 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>GD32F330xB	GD GD32F330xB</state>
+                    <state>GD32F310x8	GD GD32F310x8</state>
                 </option>
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -201,7 +201,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>GD32F330</state>
+                    <state>GD32F310</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>

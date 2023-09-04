@@ -2,7 +2,7 @@
 
 "--cpu=Cortex-M4" 
 
-"--fpu=None" 
+"--fpu=VFPv4_SP" 
 
 "-p" 
 
@@ -10,7 +10,7 @@
 
 "--semihosting" 
 
-"--device=GD32F330xB" 
+"--device=GD32F310x8" 
 
 "--drv_communication=USB0" 
 
