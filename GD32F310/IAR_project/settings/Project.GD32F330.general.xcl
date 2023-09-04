@@ -1,0 +1,15 @@
+"F:\IAR Systems\Embedded Workbench 9.2\arm\bin\armPROC.dll" 
+
+"F:\IAR Systems\Embedded Workbench 9.2\arm\bin\armJLINK.dll" 
+
+"E:\app\julia\FOC\GD32F310\IAR_project\GD32F330\Exe\Project.out" 
+
+--plugin="F:\IAR Systems\Embedded Workbench 9.2\arm\bin\armbat.dll" 
+
+--device_macro="F:\IAR Systems\Embedded Workbench 9.2\arm/config/debugger/GD/GD32F3x0.dmac" 
+
+--flash_loader="F:\IAR Systems\Embedded Workbench 9.2\arm\config\flashloader\GD\FlashGD32F330xB.board" 
+
+
+
+
