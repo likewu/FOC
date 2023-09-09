@@ -14,7 +14,15 @@
 #include "main.h"
 #include "gd32f310r_eval.h"
 
+#define PWM_FREQ ((uint16_t) 16000) // in Hz  (N.b.: pattern type is center aligned)
+#define PWM_PRSC ((uint8_t)0)
+#define HALF_PWM_PERIOD ((uint16_t) (CKTIM / (uint32_t)(2 * PWM_FREQ *(PWM_PRSC+1)))) 
 
+#define CKTIM	((uint32_t)72000000uL) 	/* Silicon running at 72MHz Resolution: 1Hz */
+#define DEADTIME_NS	((uint16_t) 500)  //in nsec; range is [0...3500]
+#define DEADTIME  (uint16_t)((unsigned long long)CKTIM / 2 * (unsigned long long)DEADTIME_NS/1000000000uL)
+#define ADC_PRE_PRIORITY (uint8_t)1
+#define ADC_SUB_PRIORITY (uint8_t)1
 
 /*!
     \brief      toggle the led every 500ms
