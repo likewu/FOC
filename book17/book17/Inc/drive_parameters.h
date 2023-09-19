@@ -55,7 +55,7 @@
 /**************************    DRIVE SETTINGS SECTION   **********************/
 /* PWM generation and current reading */
 
-#define PWM_FREQUENCY   15000
+#define PWM_FREQUENCY   16000
 #define PWM_FREQ_SCALING 1
 
 #define LOW_SIDE_SIGNALS_ENABLING        ES_GPIO
@@ -65,10 +65,10 @@
                                                            number of PWM cycles */
 /* Gains values for torque and flux control loops */
 #define PID_TORQUE_KP_DEFAULT         2920
-#define PID_TORQUE_KI_DEFAULT         454
+#define PID_TORQUE_KI_DEFAULT         426
 #define PID_TORQUE_KD_DEFAULT         100
 #define PID_FLUX_KP_DEFAULT           2920
-#define PID_FLUX_KI_DEFAULT           454
+#define PID_FLUX_KI_DEFAULT           426
 #define PID_FLUX_KD_DEFAULT           100
 
 /* Torque/Flux control loop gains dividers*/
