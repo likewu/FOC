@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <PlDriver>
-        <MemConfigValue>F:\IAR Systems\Embedded Workbench 9.2\arm\config\debugger\GD\GD32F330xB.ddf</MemConfigValue>
+        <MemConfigValue>F:\IAR Systems\Embedded Workbench 9.2\arm\config\debugger\GD\GD32F310x8.ddf</MemConfigValue>
     </PlDriver>
     <JLinkDriver>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
