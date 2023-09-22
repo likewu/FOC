@@ -1,4 +1,5 @@
 //https://blog.csdn.net/aoyousihaiqiuqihuang/article/details/119980723
+//https://github.com/pms67/PID
 #include "pid2.h"
 
 PIDdata_t PidCurrent = PI_CONTROLLER_DEFAULTS;
@@ -11,7 +12,7 @@ void updatePID( PIDdata_t *pid )
   float error = setpoint - measurement;
  
   /*Integral*/
-  pid->integrator = pid->integrator +  pid->Ki*(error + pid->prevError);
+  pid->integrator = pid->integrator +  0.5f * (error + pid->prevError);
   /* Anti-wind-up via integrator clamping */
   pid->integrator = sat(pid->integrator, pid->limMaxInt, pid->limMinInt);
 
@@ -19,7 +20,7 @@ void updatePID( PIDdata_t *pid )
   pid->differentiator = (error - pid->prevError); /* Note: derivative on measurement, therefore minus sign in front of equation! */
  
   /*Compute output and apply limits*/
-  pid->Out = (pid->Kp) * error + (pid->Ki)* (pid->integrator) + (pid->Kd) * (pid->differentiator);
+  pid->Out = pid->Kp * error + pid->Ki * pid->integrator + pid->Kd * pid->differentiator;
   pid->Out = sat(pid->Out, pid->limMax, pid->limMin);
  
   /* Store error and measurement for later use */
