@@ -1,19 +1,11 @@
 #ifndef __PID_H_
 #define __PID_H_
 
-
-
-
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 
-
-
 #define sat(x, max, min)                            \
-																	                  \
-			(x > max) ? max : ( (x < min) ?  min : x )    \
-			
-			
+			(x > max) ? max : ( (x < min) ?  min : x )
 
 // PID Variables
 typedef struct PIDdata
@@ -49,12 +41,8 @@ typedef struct PIDdata
                            0.0,	  \
                            1.0 	  \
               			  }
-
-											
 											
 extern PIDdata_t PidCurrent;											
 void updatePID( PIDdata_t *pid );
-
-
 
 #endif

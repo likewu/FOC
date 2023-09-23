@@ -1,5 +1,5 @@
-#ifndef __PID2_H_
-#define __PID2_H_
+#ifndef __PID3_H_
+#define __PID3_H_
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
@@ -17,19 +17,27 @@ typedef struct PIDdata
   float Kp;
   float Ki;
   float Kd;
+
+  /* Derivative low-pass filter time constant */
+  float tau;
+
   /* Output limits */
   float limMin;
   float limMax;
+  
   /* Integrator limits */
   float limMinInt;
   float limMaxInt;
+
   /* Sample time (in seconds) */
   float T;
+
   /* Controller "memory" */
   float integrator;
   float prevError;      /* Required for integrator */
   float differentiator;
   float prevMeasurement;    /* Required for differentiator */
+
   /* Controller output */
   float Out;
 } PIDdata_t;
@@ -37,14 +45,15 @@ typedef struct PIDdata
 #define PI_CONTROLLER_DEFAULTS {	\
 						               0.0f, 		\
                            0.0f, 		\
-						               0.9f, 		\
+						               2.0f, 		\
                            0.5f,	  \
-                           0.0f,	  \
+                           0.25f,	  \
+                           0.02f,   \
 													 -1.0f,	  \
                            1.0f,	  \
                            -1.0f,   \
                            1.0f,	  \
-                           0.1f,  	\
+                           0.01f, 	\
                            0.0f,	  \
                            0.0f,	  \
                            0.0f, 	  \
