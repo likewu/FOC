@@ -39,8 +39,12 @@ P = tf([1,1],[1,0,0])
 C = pid(PID_KP, PID_KI, PID_KD; form=:parallel)
 gangoffourplot(P, C)
 #PC==CP
+G=P*C/(1+P*C)
+y = step(G |> ss, t).y
+plot(t,y')
 
-y = timedomain()
+L = feedback(P*C) |> ss
+y = step(L, t).y
 plot(t,y')
 
 
@@ -50,9 +54,3 @@ si = stepinfo(res, y0=0)
 plot(si)
 =#
 
-
-function timedomain()
-    #C1    = pid(PID_KP, PID_KI, PID_KD)
-    L     = feedback(P*C) |> ss
-    step(L, t).y
-end
