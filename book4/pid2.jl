@@ -26,6 +26,7 @@ float TestSystem_Update(float inp) {
 =#
 #https://matlab.mathworks.com/
 #f=x+1  F=(s + 1)/s^2
+#F=laplace(f) f=ilaplace(F)
 P = tf([1,1],[1,0,0])  
 ωp = 0.8
 C1,kp,ki,fig = loopshapingPI(P,ωp,phasemargin=60,form=:parallel, doplot=true)
@@ -40,8 +41,10 @@ C = pid(PID_KP, PID_KI, PID_KD; form=:parallel)
 gangoffourplot(P, C)
 #PC==CP
 G=P*C/(1+P*C)
-y = step(G |> ss, t).y
+y1 = step(G |> ss, t).y
+y = step(2*G |> ss, t).y  #Ref=2
 plot(t,y')
+plot!(t,y1')
 
 L = feedback(P*C) |> ss
 y = step(L, t).y
