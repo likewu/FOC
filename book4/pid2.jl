@@ -42,14 +42,32 @@ gangoffourplot(P, C)
 #PC==CP
 G=P*C/(1+P*C)
 y1 = step(G |> ss, t).y
-y = step(2*G |> ss, t).y  #Ref=2
+y = step(setpoint*G |> ss, t).y
+si = stepinfo(setpoint*G, t)
 plot(t,y')
 plot!(t,y1')
+plot(si)
+pidplots(
+    P,
+    :controller;
+    params_p = PID_KP,
+    params_i = PID_KI,
+    ω = ωp,
+    ylims = (-2, 2),
+    xlims = (-3, 3),
+    form = :parallel,
+)
 
 L = feedback(P*C) |> ss
 y = step(L, t).y
 plot(t,y')
 
+#=
+res = step(G, t)
+plot(res)
+si = stepinfo(res)
+plot(si)
+=#
 
 #=
 res = step(P, t)
@@ -57,3 +75,18 @@ si = stepinfo(res, y0=0)
 plot(si)
 =#
 
+
+
+
+
+
+#=
+import sympy
+//from sympy.abc import t, s, a
+t, s = sympy.symbols('t, s')
+a = sympy.symbols('a', real=True, positive=True)
+f = t**a
+F = sympy.laplace_transform(f, t, s, noconds=True)
+F = exp(-a*s)/s
+f = inverse_laplace_transform(, s, t)
+=#
