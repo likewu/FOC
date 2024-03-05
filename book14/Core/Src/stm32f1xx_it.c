@@ -220,11 +220,42 @@ void DMA1_Channel1_IRQHandler(void)
 void TIM1_UP_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_IRQn 0 */
-
+#if 0
   /* USER CODE END TIM1_UP_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_UP_IRQn 1 */
+#else
+  static uint8_t cnt = 0;
 
+  if( __HAL_TIM_GET_FLAG( &htim1, TIM_FLAG_UPDATE ) != RESET )
+  {
+      __HAL_TIM_CLEAR_IT( &htim1, TIM_IT_UPDATE);
+
+      // 每10ms 执行一次速度闭环控制,这里演示的是直接速度环，还可以速度环内嵌电流环方式实现，
+      // 一样可以实现速度闭环控制
+      if( ++cnt == 10 )
+      {
+        cnt = 0;
+
+        PidSpeed.Ref = (ADC2->DR>>2)/512.0f - 1.0f;
+        mymotor.SpeedRef = PidSpeed.Ref*12000.0f;
+        PidSpeed.Fbk = mymotor.SpeedBck/12000.0f;  // 速度0-12000 归一化到 0 - 1
+        updatePID(&PidSpeed);
+        BldcUpdataPwm( PidSpeed.Out*1199 );
+      }
+
+      mymotor.Current = getCurrent();
+      if( mymotor.Dir == 0 ) mymotor.Current = -mymotor.Current;
+
+//      PidCurrent.Fbk = mymotor.Current/4095.0f;  // 4095*0.99/3.3
+//      if( mymotor.Dir == 0 )
+//      PidCurrent.Fbk = -PidCurrent.Fbk;
+//      updatePID(&PidCurrent);
+//      BldcUpdataPwm( PidCurrent.Out*1199 );
+
+  }
+
+#endif
   /* USER CODE END TIM1_UP_IRQn 1 */
 }
 
@@ -234,11 +265,34 @@ void TIM1_UP_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-
+#if 0
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
+#else
 
+  if(__HAL_TIM_GET_FLAG(&htim2, TIM_FLAG_UPDATE) != RESET)
+  {
+      __HAL_TIM_CLEAR_IT(&htim2, TIM_IT_UPDATE);
+
+      mymotor.HallGet = 0;
+      GetBldcSpeed( &mymotor, 60000 );
+
+      BldcMove( &mymotor );
+  }
+
+  if( __HAL_TIM_GET_FLAG(&htim2, TIM_FLAG_CC1) != RESET )
+  {
+      __HAL_TIM_CLEAR_IT(&htim2, TIM_IT_CC1);
+
+      mymotor.HallGet = 1;
+      GetBldcSpeed( &mymotor, TIM2->CNT );
+      TIM2->CNT = 0;
+      // 在这里完成换相操作
+      BldcMove( &mymotor );
+  }
+
+#endif
   /* USER CODE END TIM2_IRQn 1 */
 }
 

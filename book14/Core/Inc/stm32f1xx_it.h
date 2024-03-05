@@ -27,12 +27,14 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bldc.h"
+#include "pid.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern PIDdata_t PidSpeed;
+//extern BldcMotor_t mymotor;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

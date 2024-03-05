@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bldc.h"
+#include "pid.h"
+#include "visualscope.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +41,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
- ADC_HandleTypeDef hadc1;
+ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
 DMA_HandleTypeDef hdma_adc1;
 
@@ -67,7 +69,7 @@ static void MX_ADC2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint16_t adcTemp[64];
 /* USER CODE END 0 */
 
 /**
@@ -77,7 +79,8 @@ static void MX_ADC2_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  uint8_t tx[10];
+  int16_t speed;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -106,6 +109,26 @@ int main(void)
   MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
 
+  // ADC 校准
+  ADC1->CR2 |= ADC_CR2_ADON;
+  ADC1->CR2 |= ADC_CR2_CAL;
+  while ( ADC1->CR2 & ADC_CR2_CAL );
+
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adcTemp, 64 );
+  HAL_ADC_Start(&hadc2);
+
+  // 开始ADC转换
+  BldcStart( &mymotor, 200 );
+
+  // 下面的KP,KI,KD参数根据自己的系统去微调
+  //  PidCurrent.Kp = 0.8;
+  //  PidCurrent.Ki = 0.1;
+  //  PidCurrent.Kd = 0.001;
+  //  PidCurrent.Ref = 100/4095.0f;
+
+  PidSpeed.Kp = 1.0;
+  PidSpeed.Ki = 0.1;
+  PidSpeed.Kd = 0.001;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,6 +138,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    *(uint16_t *)tx = mymotor.Current;
+    *(uint16_t *)(tx+2) = mymotor.SpeedRef;
+    if( mymotor.SpeedBck > 32000 ) speed = 32000;
+    else if( mymotor.SpeedBck < -32000 ) speed = -32000;
+    else speed = mymotor.SpeedBck;
+    *(uint16_t *)(tx+4) = speed;  //  电机转速 ，转/分
+    CRC16( tx, tx+8, 8 );
+    HAL_UART_Transmit(&huart2,tx,10,10);
+    HAL_Delay(2);
   }
   /* USER CODE END 3 */
 }
@@ -377,7 +409,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
-  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICSelection = TIM_ICSELECTION_TRC;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
   sConfigIC.ICFilter = 2;
   if (HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
@@ -446,8 +478,8 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  //HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  //HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
 }
 
@@ -499,7 +531,35 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+uint16_t getCurrent( void )
+{
+  uint8_t i,j=0;
+  uint32_t sum = 0;
+  uint16_t max = 0;
 
+#if 1
+
+  for( i = 0; i<64; i++ )
+  {
+    sum += adcTemp[i];
+  }
+  sum >>= 6;
+
+  return sum;
+
+#else
+
+  for( i = 0; i<64; i++ )
+  {
+    if( max < adcTemp[i] )  max = adcTemp[i];
+  }
+
+  return max;
+
+#endif
+
+
+}
 /* USER CODE END 4 */
 
 /**

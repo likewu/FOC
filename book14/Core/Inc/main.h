@@ -58,6 +58,11 @@ void Error_Handler(void);
 
 /* USER CODE END EFP */
 
+/* USER CODE BEGIN Prototypes */
+extern uint16_t adcTemp[64];
+uint16_t getCurrent( void );
+/* USER CODE END Prototypes */
+
 /* Private defines -----------------------------------------------------------*/
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
