@@ -133,6 +133,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  uint32_t i;
   while (1)
   {
     /* USER CODE END WHILE */
@@ -147,6 +148,21 @@ int main(void)
     CRC16( tx, tx+8, 8 );
     HAL_UART_Transmit(&huart2,tx,10,10);
     HAL_Delay(2);
+
+
+    //简单版
+    // 正转3秒
+    /*i = HAL_GetTick();
+    while( HAL_GetTick() - i < 3000 )
+    {
+        BldcMove1( 0 );
+    }
+    // 反转3秒
+    i = HAL_GetTick();
+    while( HAL_GetTick() - i < 3000 )
+    {
+        BldcMove1( 1 );
+    }*/
   }
   /* USER CODE END 3 */
 }

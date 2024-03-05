@@ -150,6 +150,95 @@ void BldcMove( BldcMotor_t *motor )
 	
 }
 
+//  电机驱动(简单版)
+void BldcMove1( uint8_t Dir )
+{
+    static uint8_t prehall = 0;
+    uint8_t hall = GetBldcHall();
+
+    if( prehall != hall )
+    {
+
+        GPIOC->ODR &= ~(7<<10);
+        GPIOA->ODR &= ~(7<<8);
+
+        if( Dir )
+        {
+            switch( hall )
+            {
+                case 2:
+                    GPIOA->ODR |= 2<<8;
+                    GPIOC->ODR |= 6<<10;
+                    break;
+
+                case 6:
+                    GPIOA->ODR |= 1<<8;
+                    GPIOC->ODR |= 5<<10;
+                    break;
+
+                case 4:
+                    GPIOA->ODR |= 1<<8;
+                    GPIOC->ODR |= 3<<10;
+                    break;
+
+                case 5:
+                    GPIOA->ODR |= 4<<8;
+                    GPIOC->ODR |= 6<<10;
+                    break;
+
+                case 1:
+                    GPIOA->ODR |= 4<<8;
+                    GPIOC->ODR |= 5<<10;
+                    break;
+
+                case 3:
+                    GPIOA->ODR |= 2<<8;
+                    GPIOC->ODR |= 3<<10;
+                    break;
+
+                default:break;
+            }
+        }
+        else
+        {
+            switch( hall )
+            {
+                case 5:
+                    GPIOA->ODR |= 2<<8;
+                    GPIOC->ODR |= 6<<10;
+                    break;
+
+                case 1:
+                    GPIOA->ODR |= 1<<8;
+                    GPIOC->ODR |= 5<<10;
+                    break;
+
+                case 3:
+                    GPIOA->ODR |= 1<<8;
+                    GPIOC->ODR |= 3<<10;
+                    break;
+
+                case 2:
+                    GPIOA->ODR |= 4<<8;
+                    GPIOC->ODR |= 6<<10;
+                    break;
+
+                case 6:
+                    GPIOA->ODR |= 4<<8;
+                    GPIOC->ODR |= 5<<10;
+                    break;
+
+                case 4:
+                    GPIOA->ODR |= 2<<8;
+                    GPIOC->ODR |= 3<<10;
+                    break;
+
+                default:break;
+            }
+        }
+        prehall = hall;
+    }
+}
 
 //  电机驱动
 void BldcStart( BldcMotor_t *motor,int16_t speed )

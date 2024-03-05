@@ -38,6 +38,7 @@ uint8_t GetBldcHall(void);
 void BldcStart( BldcMotor_t *motor,int16_t speed );
 void BldcStop( BldcMotor_t *motor );
 void BldcMove( BldcMotor_t *motor );
+void BldcMove1( uint8_t Dir );
 void BldcUpdataPwm( int16_t pwm );
 
 
