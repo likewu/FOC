@@ -101,18 +101,18 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  GPIO_Init();
-  Timer2_init();
-  //MX_GPIO_Init();
+  //GPIO_Init();
+  //Timer1_init();
+  MX_GPIO_Init();
   MX_DMA_Init();
-  //MX_ADC1_Init();
-  //MX_TIM1_Init();
-  //MX_TIM2_Init();
+  MX_ADC1_Init();
+  MX_TIM1_Init();
+  MX_TIM2_Init();
   MX_USART2_UART_Init();
-  //MX_ADC2_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
 
-  /*
+  //
   // ADC 校准
   ADC1->CR2 |= ADC_CR2_ADON;
   ADC1->CR2 |= ADC_CR2_CAL;
@@ -120,10 +120,10 @@ int main(void)
 
   HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adcTemp, 64 );
   HAL_ADC_Start(&hadc2);
-
+  //
   // 开始ADC转换
   BldcStart( &mymotor, 200 );
-  */
+
 
   // 下面的KP,KI,KD参数根据自己的系统去微调
   //  PidCurrent.Kp = 0.8;
@@ -139,23 +139,24 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint32_t i;
+  TIM1->CCER|=0x0111;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    for (int i=0;i<rate;i=i+3){
-      TIM2->CCR1=i;
-      TIM2->CCR2=rate-i;
-      //TIM1->CCR3=rate-i;
+    /*for (int i=0;i<rate;i=i+3){
+      TIM1->CCR1=i;
+      TIM1->CCR2=rate-i;
+      TIM1->CCR3=rate-i;
       HAL_Delay(10);
     }
     for (int i=rate;i>0;i=i-3){
-      TIM2->CCR1=i;
-      TIM2->CCR2=rate-i;
-      //TIM1->CCR3=rate-i;
+      TIM1->CCR1=i;
+      TIM1->CCR2=rate-i;
+      TIM1->CCR3=rate-i;
       HAL_Delay(10);
-    }
+    }*/
 
     *(uint16_t *)tx = mymotor.Current;
     *(uint16_t *)(tx+2) = mymotor.SpeedRef;
@@ -198,8 +199,8 @@ void GPIO_Init(void)
   PA9     ------> TIM1_CH2
   PA10     ------> TIM1_CH3
   */
-  //GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10;
-  GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1 ;
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10;
+  GPIO_InitStruct.Pin |= GPIO_PIN_0|GPIO_PIN_1 ;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -210,8 +211,8 @@ void Timer1_init(void){
   TIM1->ARR=rate; //set the maximum count value
   TIM1->CNT=0; //seset the current count
   TIM1->CCMR1=(1<<5)|(1<<6)|(1<<13)|(1<<14); //configure the pins as PWM
-  //TIM1->CCMR2=(1<<5)|(1<<6);
-  TIM1->CCER|=0x11; //enbale channel1 and channel2 and channel3
+  TIM1->CCMR2=(1<<5)|(1<<6);
+  TIM1->CCER|=0x0111; //enbale channel1 and channel2 and channel3
   TIM1->CR1=1; //enable timer
 }
 void Timer2_init(void){
