@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>GD32F310</name>
+        <name>GD32F30X_CL</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -16,19 +16,19 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>GD32F310\BrowseInfo</state>
+                    <state>GD32F30X_CL\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>GD32F310\Exe</state>
+                    <state>GD32F30X_CL\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>GD32F310\Obj</state>
+                    <state>GD32F30X_CL\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>GD32F310\List</state>
+                    <state>GD32F30X_CL\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -36,11 +36,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Automatic choice of formatter, without multibyte support.</state>
+                    <state>Automatic choice of formatter.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Automatic choice of formatter, without multibyte support.</state>
+                    <state>Automatic choice of formatter.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -62,7 +62,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>A complete configuration of the C/C++14 runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
+                    <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -74,7 +74,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>GD32F310x8	GD GD32F310x8</state>
+                    <state>GD32F307xC	GD GD32F307xC</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -120,17 +120,17 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>GD32F310x8	GD GD32F310x8</state>
+                    <state>GD32F307xC	GD GD32F307xC</state>
                 </option>
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>4</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -201,7 +201,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>GD32F310</state>
+                    <state>GD32F30X_CL</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -228,8 +228,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>USE_STDPERIPH_DRIVER</state>
-                    <state>GD32F3X0</state>
-                    <state>GD32F310</state>
+                    <state>GD32F30X_CL</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -350,11 +349,11 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Include</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS\GD\GD32F3x0\Include</state>
-                    <state>E:\app\julia\FOC\GD32F310</state>
-                    <state>E:\app\julia\FOC\GD32F310\Utilities</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\CMSIS</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Include</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Include</state>
+                    <state>$PROJ_DIR$\..\..\Utilities</state>
+                    <state>$PROJ_DIR$\..</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -526,7 +525,7 @@
                 </option>
                 <option>
                     <name>ADebug</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>AltRegisterNames</name>
@@ -686,7 +685,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>32</hasPrio>
+                <hasPrio>0</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -767,11 +766,11 @@
                 </option>
                 <option>
                     <name>IlinkIcfOverride</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F310x8.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F307xC.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -922,7 +921,7 @@
                 </option>
                 <option>
                     <name>IlinkOptInline</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkOptExceptionsAllow</name>
@@ -1004,7 +1003,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>Project_import_lib.o</state>
+                    <state>###Unitialized###</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -1092,7 +1091,7 @@
         </settings>
     </configuration>
     <configuration>
-        <name>GD32F350</name>
+        <name>GD32F30X_XD</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -1106,19 +1105,19 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>GD32F350\BrowseInfo</state>
+                    <state>GD32F30X_XD\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>GD32F350\Exe</state>
+                    <state>GD32F30X_XD\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>GD32F350\Obj</state>
+                    <state>GD32F30X_XD\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>GD32F350\List</state>
+                    <state>GD32F30X_XD\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -1164,7 +1163,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>GD32F350xB	GD GD32F350xB</state>
+                    <state>GD32F303xG	GD GD32F303xG</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -1210,17 +1209,17 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>GD32F350xB	GD GD32F350xB</state>
+                    <state>GD32F303xG	GD GD32F303xG</state>
                 </option>
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>4</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -1291,7 +1290,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>GD32F350</state>
+                    <state>GD32F30X_XD</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -1318,8 +1317,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>USE_STDPERIPH_DRIVER</state>
-                    <state>GD32F3X0</state>
-                    <state>GD32F350</state>
+                    <state>GD32F30X_XD</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -1440,11 +1438,11 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Include</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS\GD\GD32F3x0\Include</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Utilities</state>
-                    <state>E:\app\julia\FOC\GD32F310</state>
+                    <state>$PROJ_DIR$\..\..\Firmware</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Include</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Include</state>
+                    <state>$PROJ_DIR$\..\..\Utilities</state>
+                    <state>$PROJ_DIR$\..</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1861,7 +1859,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F350xB.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F303xG.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -2182,7 +2180,7 @@
         </settings>
     </configuration>
     <configuration>
-        <name>GD32F310</name>
+        <name>GD32F30X_HD</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
@@ -2196,19 +2194,19 @@
                 <debug>1</debug>
                 <option>
                     <name>BrowseInfoPath</name>
-                    <state>GD32F310\BrowseInfo</state>
+                    <state>GD32F30X_HD\BrowseInfo</state>
                 </option>
                 <option>
                     <name>ExePath</name>
-                    <state>GD32F310\Exe</state>
+                    <state>GD32F30X_HD\Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>GD32F310\Obj</state>
+                    <state>GD32F30X_HD\Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>GD32F310\List</state>
+                    <state>GD32F30X_HD\List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -2254,7 +2252,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>GD32F310x8	GD GD32F310x8</state>
+                    <state>GD32F303xC	GD GD32F303xC</state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -2300,7 +2298,7 @@
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>GD32F310x8	GD GD32F310x8</state>
+                    <state>GD32F303xC	GD GD32F303xC</state>
                 </option>
                 <option>
                     <name>FPU2</name>
@@ -2381,7 +2379,7 @@
                 </option>
                 <option>
                     <name>BuildFilesPath</name>
-                    <state>GD32F310</state>
+                    <state>GD32F30X_HD</state>
                 </option>
                 <option>
                     <name>PointerAuthentication</name>
@@ -2408,8 +2406,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>USE_STDPERIPH_DRIVER</state>
-                    <state>GD32F3X0</state>
-                    <state>GD32F310</state>
+                    <state>GD32F30X_HD</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -2530,11 +2527,11 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Include</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS\GD\GD32F3x0\Include</state>
-                    <state>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Utilities</state>
-                    <state>E:\app\julia\FOC\GD32F310</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\CMSIS</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Include</state>
+                    <state>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Include</state>
+                    <state>$PROJ_DIR$\..\..\Utilities</state>
+                    <state>$PROJ_DIR$\..</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2706,7 +2703,7 @@
                 </option>
                 <option>
                     <name>ADebug</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>AltRegisterNames</name>
@@ -2951,7 +2948,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F310x8.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\GD\GD32F303xC.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -3102,7 +3099,7 @@
                 </option>
                 <option>
                     <name>IlinkOptInline</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkOptExceptionsAllow</name>
@@ -3274,7 +3271,7 @@
     <group>
         <name>Application</name>
         <file>
-            <name>$PROJ_DIR$\..\gd32f3x0_it.c</name>
+            <name>$PROJ_DIR$\..\gd32f30x_it.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\main.c</name>
@@ -3286,7 +3283,7 @@
     <group>
         <name>CMSIS</name>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS\GD\GD32F3x0\Source\system_gd32f3x0.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Source\system_gd32f30x.c</name>
         </file>
     </group>
     <group>
@@ -3296,87 +3293,108 @@
         </file>
     </group>
     <group>
-        <name>GD32F3x0_EVAL</name>
+        <name>GD32F30x_EVAL</name>
         <file>
-            <name>$PROJ_DIR$\..\Utilities\gd32f310r_eval.c</name>
+            <name>$PROJ_DIR$\..\..\Utilities\gd32f307c_eval.c</name>
         </file>
     </group>
     <group>
-        <name>GD32F3x0_Peripherals</name>
+        <name>GD32F30x_Peripherals</name>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_adc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_adc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_cec.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_bkp.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_cmp.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_can.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_crc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_crc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_ctc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_ctc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_dac.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_dac.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_dbg.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_dbg.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_dma.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_dma.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_exti.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_enet.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_fmc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_exmc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_fwdgt.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_exti.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_gpio.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_fmc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_i2c.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_fwdgt.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_misc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_gpio.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_pmu.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_i2c.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_rcu.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_misc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_rtc.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_pmu.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_spi.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_rcu.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_syscfg.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_rtc.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_timer.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_sdio.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_tsi.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_spi.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_usart.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_timer.c</name>
         </file>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\GD32F3x0_standard_peripheral\Source\gd32f3x0_wwdgt.c</name>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_usart.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Firmware\GD32F30x_standard_peripheral\Source\gd32f30x_wwdgt.c</name>
         </file>
     </group>
     <group>
         <name>Startup</name>
         <file>
-            <name>F:\IAR Systems\GD32F3x0_Firmware_Library_V2.2.1\Firmware\CMSIS\GD\GD32F3x0\Source\IAR\startup_gd32f3x0.s</name>
+            <name>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Source\IAR\startup_gd32f30x_cl.s</name>
+            <excluded>
+                <configuration>GD32F30X_XD</configuration>
+                <configuration>GD32F30X_HD</configuration>
+            </excluded>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Source\IAR\startup_gd32f30x_hd.s</name>
+            <excluded>
+                <configuration>GD32F30X_CL</configuration>
+                <configuration>GD32F30X_XD</configuration>
+            </excluded>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\Firmware\CMSIS\GD\GD32F30x\Source\IAR\startup_gd32f30x_xd.s</name>
+            <excluded>
+                <configuration>GD32F30X_CL</configuration>
+                <configuration>GD32F30X_HD</configuration>
+            </excluded>
         </file>
     </group>
 </project>

@@ -4,5 +4,6 @@
 
 
 https://blog.csdn.net/lone5moon/article/details/117790199
-F:\xPacks\@xpack-dev-tools\openocd\0.11.0-4.1\.content\bin\openocd.exe -f interface\cmsis-dap.cfg -f target\stm32f4x.cfg
+xpm install @xpack-dev-tools/openocd@latest --verbose
+F:\xPacks\@xpack-dev-tools\openocd\0.12.0-2.1\.content\bin\openocd.exe -f interface\cmsis-dap.cfg -f target\stm32f4x.cfg
 GDB连接设置改为远程GDB服务器-->端口保持默认-->调试探头改为OpenOCD-->取消勾选实时表达式，否则无法成功调试-->最后开始Debug调试。

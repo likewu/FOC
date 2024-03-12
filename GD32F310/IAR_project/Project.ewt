@@ -2,7 +2,7 @@
 <project>
     <fileVersion>4</fileVersion>
     <configuration>
-        <name>GD32F330</name>
+        <name>GD32F310</name>
         <toolchain>
             <name>ARM</name>
         </toolchain>
