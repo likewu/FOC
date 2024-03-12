@@ -92,6 +92,7 @@ int main(void)
             gd_eval_led_on(LED1);
             delay_1ms(500);
             gd_eval_led_off(LED1);
+            delay_1ms(500);
             //gd_eval_led_toggle(LED4);
         //}
     }

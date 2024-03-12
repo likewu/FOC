@@ -1226,24 +1226,24 @@ Image Symbol Table
     i.gpio_init                              0x08000694   Section        0  gd32f30x_gpio.o(i.gpio_init)
     i.led_spark                              0x08000738   Section        0  main.o(i.led_spark)
     i.main                                   0x0800076c   Section        0  main.o(i.main)
-    i.nvic_irq_enable                        0x08000818   Section        0  gd32f30x_misc.o(i.nvic_irq_enable)
-    i.nvic_priority_group_set                0x080008b4   Section        0  gd32f30x_misc.o(i.nvic_priority_group_set)
-    i.rcu_clock_freq_get                     0x080008c8   Section        0  gd32f30x_rcu.o(i.rcu_clock_freq_get)
-    i.rcu_periph_clock_enable                0x080009c4   Section        0  gd32f30x_rcu.o(i.rcu_periph_clock_enable)
-    i.rcu_periph_reset_disable               0x080009e0   Section        0  gd32f30x_rcu.o(i.rcu_periph_reset_disable)
-    i.rcu_periph_reset_enable                0x080009fc   Section        0  gd32f30x_rcu.o(i.rcu_periph_reset_enable)
-    i.system_clock_120m_hxtal                0x08000a18   Section        0  system_gd32f30x.o(i.system_clock_120m_hxtal)
-    system_clock_120m_hxtal                  0x08000a19   Thumb Code   170  system_gd32f30x.o(i.system_clock_120m_hxtal)
-    i.system_clock_config                    0x08000ad4   Section        0  system_gd32f30x.o(i.system_clock_config)
-    system_clock_config                      0x08000ad5   Thumb Code     4  system_gd32f30x.o(i.system_clock_config)
-    i.systick_config                         0x08000ad8   Section        0  systick.o(i.systick_config)
-    i.usart_baudrate_set                     0x08000b24   Section        0  gd32f30x_usart.o(i.usart_baudrate_set)
-    i.usart_data_transmit                    0x08000b94   Section        0  gd32f30x_usart.o(i.usart_data_transmit)
-    i.usart_deinit                           0x08000b9c   Section        0  gd32f30x_usart.o(i.usart_deinit)
-    i.usart_enable                           0x08000c2c   Section        0  gd32f30x_usart.o(i.usart_enable)
-    i.usart_flag_get                         0x08000c36   Section        0  gd32f30x_usart.o(i.usart_flag_get)
-    i.usart_receive_config                   0x08000c50   Section        0  gd32f30x_usart.o(i.usart_receive_config)
-    i.usart_transmit_config                  0x08000c64   Section        0  gd32f30x_usart.o(i.usart_transmit_config)
+    i.nvic_irq_enable                        0x08000820   Section        0  gd32f30x_misc.o(i.nvic_irq_enable)
+    i.nvic_priority_group_set                0x080008bc   Section        0  gd32f30x_misc.o(i.nvic_priority_group_set)
+    i.rcu_clock_freq_get                     0x080008d0   Section        0  gd32f30x_rcu.o(i.rcu_clock_freq_get)
+    i.rcu_periph_clock_enable                0x080009cc   Section        0  gd32f30x_rcu.o(i.rcu_periph_clock_enable)
+    i.rcu_periph_reset_disable               0x080009e8   Section        0  gd32f30x_rcu.o(i.rcu_periph_reset_disable)
+    i.rcu_periph_reset_enable                0x08000a04   Section        0  gd32f30x_rcu.o(i.rcu_periph_reset_enable)
+    i.system_clock_120m_hxtal                0x08000a20   Section        0  system_gd32f30x.o(i.system_clock_120m_hxtal)
+    system_clock_120m_hxtal                  0x08000a21   Thumb Code   170  system_gd32f30x.o(i.system_clock_120m_hxtal)
+    i.system_clock_config                    0x08000adc   Section        0  system_gd32f30x.o(i.system_clock_config)
+    system_clock_config                      0x08000add   Thumb Code     4  system_gd32f30x.o(i.system_clock_config)
+    i.systick_config                         0x08000ae0   Section        0  systick.o(i.systick_config)
+    i.usart_baudrate_set                     0x08000b2c   Section        0  gd32f30x_usart.o(i.usart_baudrate_set)
+    i.usart_data_transmit                    0x08000b9c   Section        0  gd32f30x_usart.o(i.usart_data_transmit)
+    i.usart_deinit                           0x08000ba4   Section        0  gd32f30x_usart.o(i.usart_deinit)
+    i.usart_enable                           0x08000c34   Section        0  gd32f30x_usart.o(i.usart_enable)
+    i.usart_flag_get                         0x08000c3e   Section        0  gd32f30x_usart.o(i.usart_flag_get)
+    i.usart_receive_config                   0x08000c58   Section        0  gd32f30x_usart.o(i.usart_receive_config)
+    i.usart_transmit_config                  0x08000c6c   Section        0  gd32f30x_usart.o(i.usart_transmit_config)
     .data                                    0x20000000   Section        4  main.o(.data)
     timingdelaylocal                         0x20000000   Data           4  main.o(.data)
     .data                                    0x20000004   Section        4  systick.o(.data)
@@ -1426,23 +1426,23 @@ Image Symbol Table
     gpio_exti_source_select                  0x0800063d   Thumb Code    82  gd32f30x_gpio.o(i.gpio_exti_source_select)
     gpio_init                                0x08000695   Thumb Code   164  gd32f30x_gpio.o(i.gpio_init)
     led_spark                                0x08000739   Thumb Code    48  main.o(i.led_spark)
-    main                                     0x0800076d   Thumb Code   104  main.o(i.main)
-    nvic_irq_enable                          0x08000819   Thumb Code   150  gd32f30x_misc.o(i.nvic_irq_enable)
-    nvic_priority_group_set                  0x080008b5   Thumb Code    10  gd32f30x_misc.o(i.nvic_priority_group_set)
-    rcu_clock_freq_get                       0x080008c9   Thumb Code   224  gd32f30x_rcu.o(i.rcu_clock_freq_get)
-    rcu_periph_clock_enable                  0x080009c5   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_clock_enable)
-    rcu_periph_reset_disable                 0x080009e1   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_reset_disable)
-    rcu_periph_reset_enable                  0x080009fd   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_reset_enable)
-    systick_config                           0x08000ad9   Thumb Code    70  systick.o(i.systick_config)
-    usart_baudrate_set                       0x08000b25   Thumb Code   102  gd32f30x_usart.o(i.usart_baudrate_set)
-    usart_data_transmit                      0x08000b95   Thumb Code     8  gd32f30x_usart.o(i.usart_data_transmit)
-    usart_deinit                             0x08000b9d   Thumb Code   136  gd32f30x_usart.o(i.usart_deinit)
-    usart_enable                             0x08000c2d   Thumb Code    10  gd32f30x_usart.o(i.usart_enable)
-    usart_flag_get                           0x08000c37   Thumb Code    26  gd32f30x_usart.o(i.usart_flag_get)
-    usart_receive_config                     0x08000c51   Thumb Code    20  gd32f30x_usart.o(i.usart_receive_config)
-    usart_transmit_config                    0x08000c65   Thumb Code    20  gd32f30x_usart.o(i.usart_transmit_config)
-    Region$$Table$$Base                      0x08000c78   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08000c98   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x0800076d   Thumb Code   110  main.o(i.main)
+    nvic_irq_enable                          0x08000821   Thumb Code   150  gd32f30x_misc.o(i.nvic_irq_enable)
+    nvic_priority_group_set                  0x080008bd   Thumb Code    10  gd32f30x_misc.o(i.nvic_priority_group_set)
+    rcu_clock_freq_get                       0x080008d1   Thumb Code   224  gd32f30x_rcu.o(i.rcu_clock_freq_get)
+    rcu_periph_clock_enable                  0x080009cd   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_clock_enable)
+    rcu_periph_reset_disable                 0x080009e9   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_reset_disable)
+    rcu_periph_reset_enable                  0x08000a05   Thumb Code    22  gd32f30x_rcu.o(i.rcu_periph_reset_enable)
+    systick_config                           0x08000ae1   Thumb Code    70  systick.o(i.systick_config)
+    usart_baudrate_set                       0x08000b2d   Thumb Code   102  gd32f30x_usart.o(i.usart_baudrate_set)
+    usart_data_transmit                      0x08000b9d   Thumb Code     8  gd32f30x_usart.o(i.usart_data_transmit)
+    usart_deinit                             0x08000ba5   Thumb Code   136  gd32f30x_usart.o(i.usart_deinit)
+    usart_enable                             0x08000c35   Thumb Code    10  gd32f30x_usart.o(i.usart_enable)
+    usart_flag_get                           0x08000c3f   Thumb Code    26  gd32f30x_usart.o(i.usart_flag_get)
+    usart_receive_config                     0x08000c59   Thumb Code    20  gd32f30x_usart.o(i.usart_receive_config)
+    usart_transmit_config                    0x08000c6d   Thumb Code    20  gd32f30x_usart.o(i.usart_transmit_config)
+    Region$$Table$$Base                      0x08000c80   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08000ca0   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x20000008   Data           4  system_gd32f30x.o(.data)
     __stdout                                 0x200000a4   Data           4  stdout.o(.data)
     __initial_sp                             0x200004a8   Data           0  startup_gd32f30x_hd.o(STACK)
@@ -1455,9 +1455,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000131
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00000d40, Max: 0x00040000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00000d48, Max: 0x00040000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000c98, Max: 0x00040000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000ca0, Max: 0x00040000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1505,35 +1505,35 @@ Memory Map of the image
     0x0800063c   0x0800063c   0x00000058   Code   RO         1982    i.gpio_exti_source_select  gd32f30x_gpio.o
     0x08000694   0x08000694   0x000000a4   Code   RO         1983    i.gpio_init         gd32f30x_gpio.o
     0x08000738   0x08000738   0x00000034   Code   RO          182    i.led_spark         main.o
-    0x0800076c   0x0800076c   0x000000ac   Code   RO          183    i.main              main.o
-    0x08000818   0x08000818   0x0000009c   Code   RO         2301    i.nvic_irq_enable   gd32f30x_misc.o
-    0x080008b4   0x080008b4   0x00000014   Code   RO         2302    i.nvic_priority_group_set  gd32f30x_misc.o
-    0x080008c8   0x080008c8   0x000000fc   Code   RO         2500    i.rcu_clock_freq_get  gd32f30x_rcu.o
-    0x080009c4   0x080009c4   0x0000001c   Code   RO         2518    i.rcu_periph_clock_enable  gd32f30x_rcu.o
-    0x080009e0   0x080009e0   0x0000001c   Code   RO         2521    i.rcu_periph_reset_disable  gd32f30x_rcu.o
-    0x080009fc   0x080009fc   0x0000001c   Code   RO         2522    i.rcu_periph_reset_enable  gd32f30x_rcu.o
-    0x08000a18   0x08000a18   0x000000bc   Code   RO          266    i.system_clock_120m_hxtal  system_gd32f30x.o
-    0x08000ad4   0x08000ad4   0x00000004   Code   RO          267    i.system_clock_config  system_gd32f30x.o
-    0x08000ad8   0x08000ad8   0x0000004c   Code   RO          224    i.systick_config    systick.o
-    0x08000b24   0x08000b24   0x00000070   Code   RO         3822    i.usart_baudrate_set  gd32f30x_usart.o
-    0x08000b94   0x08000b94   0x00000008   Code   RO         3826    i.usart_data_transmit  gd32f30x_usart.o
-    0x08000b9c   0x08000b9c   0x00000090   Code   RO         3827    i.usart_deinit      gd32f30x_usart.o
-    0x08000c2c   0x08000c2c   0x0000000a   Code   RO         3831    i.usart_enable      gd32f30x_usart.o
-    0x08000c36   0x08000c36   0x0000001a   Code   RO         3833    i.usart_flag_get    gd32f30x_usart.o
-    0x08000c50   0x08000c50   0x00000014   Code   RO         3855    i.usart_receive_config  gd32f30x_usart.o
-    0x08000c64   0x08000c64   0x00000014   Code   RO         3869    i.usart_transmit_config  gd32f30x_usart.o
-    0x08000c78   0x08000c78   0x00000020   Data   RO         4558    Region$$Table       anon$$obj.o
+    0x0800076c   0x0800076c   0x000000b4   Code   RO          183    i.main              main.o
+    0x08000820   0x08000820   0x0000009c   Code   RO         2301    i.nvic_irq_enable   gd32f30x_misc.o
+    0x080008bc   0x080008bc   0x00000014   Code   RO         2302    i.nvic_priority_group_set  gd32f30x_misc.o
+    0x080008d0   0x080008d0   0x000000fc   Code   RO         2500    i.rcu_clock_freq_get  gd32f30x_rcu.o
+    0x080009cc   0x080009cc   0x0000001c   Code   RO         2518    i.rcu_periph_clock_enable  gd32f30x_rcu.o
+    0x080009e8   0x080009e8   0x0000001c   Code   RO         2521    i.rcu_periph_reset_disable  gd32f30x_rcu.o
+    0x08000a04   0x08000a04   0x0000001c   Code   RO         2522    i.rcu_periph_reset_enable  gd32f30x_rcu.o
+    0x08000a20   0x08000a20   0x000000bc   Code   RO          266    i.system_clock_120m_hxtal  system_gd32f30x.o
+    0x08000adc   0x08000adc   0x00000004   Code   RO          267    i.system_clock_config  system_gd32f30x.o
+    0x08000ae0   0x08000ae0   0x0000004c   Code   RO          224    i.systick_config    systick.o
+    0x08000b2c   0x08000b2c   0x00000070   Code   RO         3822    i.usart_baudrate_set  gd32f30x_usart.o
+    0x08000b9c   0x08000b9c   0x00000008   Code   RO         3826    i.usart_data_transmit  gd32f30x_usart.o
+    0x08000ba4   0x08000ba4   0x00000090   Code   RO         3827    i.usart_deinit      gd32f30x_usart.o
+    0x08000c34   0x08000c34   0x0000000a   Code   RO         3831    i.usart_enable      gd32f30x_usart.o
+    0x08000c3e   0x08000c3e   0x0000001a   Code   RO         3833    i.usart_flag_get    gd32f30x_usart.o
+    0x08000c58   0x08000c58   0x00000014   Code   RO         3855    i.usart_receive_config  gd32f30x_usart.o
+    0x08000c6c   0x08000c6c   0x00000014   Code   RO         3869    i.usart_transmit_config  gd32f30x_usart.o
+    0x08000c80   0x08000c80   0x00000020   Data   RO         4558    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08000c98, Size: 0x000004a8, Max: 0x0000c000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08000ca0, Size: 0x000004a8, Max: 0x0000c000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08000c98   0x00000004   Data   RW          184    .data               main.o
-    0x20000004   0x08000c9c   0x00000004   Data   RW          225    .data               systick.o
-    0x20000008   0x08000ca0   0x00000004   Data   RW          268    .data               system_gd32f30x.o
-    0x2000000c   0x08000ca4   0x00000098   Data   RW         4205    .data               gd32f303e_eval.o
-    0x200000a4   0x08000d3c   0x00000004   Data   RW         4532    .data               mc_w.l(stdout.o)
+    0x20000000   0x08000ca0   0x00000004   Data   RW          184    .data               main.o
+    0x20000004   0x08000ca4   0x00000004   Data   RW          225    .data               systick.o
+    0x20000008   0x08000ca8   0x00000004   Data   RW          268    .data               system_gd32f30x.o
+    0x2000000c   0x08000cac   0x00000098   Data   RW         4205    .data               gd32f303e_eval.o
+    0x200000a4   0x08000d44   0x00000004   Data   RW         4532    .data               mc_w.l(stdout.o)
     0x200000a8        -       0x00000400   Zero   RW         4189    STACK               startup_gd32f30x_hd.o
 
 
@@ -1551,13 +1551,13 @@ Image component sizes
        176         16          0          0          0       1608   gd32f30x_misc.o
        336         46          0          0          0       3592   gd32f30x_rcu.o
        340         18          0          0          0       5165   gd32f30x_usart.o
-       260         78          0          4          0       5539   main.o
+       268         80          0          4          0       5543   main.o
         36          8        304          0       1024        976   startup_gd32f30x_hd.o
        324         32          0          4          0       3047   system_gd32f30x.o
        144         14          0          4          0      29086   systick.o
 
     ----------------------------------------------------------------------
-      2384        264        336        164       1024      97369   Object Totals
+      2392        266        336        164       1024      97373   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          2          0          0          0          0          0   (incl. Padding)
 
@@ -1599,15 +1599,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2888        294        336        168       1024      94253   Grand Totals
-      2888        294        336        168       1024      94253   ELF Image Totals
-      2888        294        336        168          0          0   ROM Totals
+      2896        296        336        168       1024      94257   Grand Totals
+      2896        296        336        168       1024      94257   ELF Image Totals
+      2896        296        336        168          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3224 (   3.15kB)
+    Total RO  Size (Code + RO Data)                 3232 (   3.16kB)
     Total RW  Size (RW Data + ZI Data)              1192 (   1.16kB)
-    Total ROM Size (Code + RO Data + RW Data)       3392 (   3.31kB)
+    Total ROM Size (Code + RO Data + RW Data)       3400 (   3.32kB)
 
 ==============================================================================
 
