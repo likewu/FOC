@@ -50,7 +50,7 @@ static uint32_t COM_GPIO_PORT[COMn] = {EVAL_COM1_GPIO_PORT, EVAL_COM2_GPIO_PORT}
 static rcu_periph_enum COM_GPIO_CLK[COMn] = {EVAL_COM1_GPIO_CLK, EVAL_COM2_GPIO_CLK};
 
 static rcu_periph_enum GPIO_CLK[LEDn] = {LED2_GPIO_CLK, LED3_GPIO_CLK, 
-                                         LED4_GPIO_CLK, LED5_GPIO_CLK};
+                                         LED4_GPIO_CLK, LED5_GPIO_CLK, LED1_GPIO_CLK};
 
 static uint32_t KEY_PORT[KEYn] = {WAKEUP_KEY_GPIO_PORT, 
                                   TAMPER_KEY_GPIO_PORT,
