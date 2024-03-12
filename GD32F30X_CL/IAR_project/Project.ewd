@@ -44,7 +44,7 @@
                 </option>
                 <option>
                     <name>MemFile</name>
-                    <state>$TOOLKIT_DIR$\config\debugger\GD\GD32F307xC.ddf</state>
+                    <state>$TOOLKIT_DIR$\config\debugger\GD\GD32F303xC.ddf</state>
                 </option>
                 <option>
                     <name>RunToEnable</name>
@@ -84,7 +84,7 @@
                 </option>
                 <option>
                     <name>OCDynDriverList</name>
-                    <state>JLINK_ID</state>
+                    <state>CMSISDAP_ID</state>
                 </option>
                 <option>
                     <name>OCLastSavedByProductVersion</name>
@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>FlashLoadersV3</name>
-                    <state>$TOOLKIT_DIR$/config/flashloader/GD/FlashGD32F307xC.board</state>
+                    <state>$TOOLKIT_DIR$/config/flashloader/GD/FlashGD32F303xC.board</state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck1</name>
@@ -332,7 +332,7 @@
                 <option>
                     <name>CMSISDAPResetList</name>
                     <version>1</version>
-                    <state>9</state>
+                    <state>4</state>
                 </option>
                 <option>
                     <name>CMSISDAPHWResetDuration</name>
@@ -369,7 +369,7 @@
                 <option>
                     <name>CMSISDAPJtagSpeedList</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>9</state>
                 </option>
                 <option>
                     <name>CMSISDAPBreakpointRadio</name>
@@ -469,7 +469,7 @@
                 </option>
                 <option>
                     <name>CMSISDAPSelectedCPUBehaviour</name>
-                    <state>0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>ICpuName</name>

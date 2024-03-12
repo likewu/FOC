@@ -4384,7 +4384,7 @@
     <group>
         <name>Startup</name>
         <file>
-            <name>F:\IAR Systems\GD32F30x_Firmware_Library_V2.2.0\Firmware\CMSIS\GD\GD32F30x\Source\IAR\startup_gd32f30x_cl.s</name>
+            <name>F:\IAR Systems\GD32F30x_Firmware_Library_V2.2.0\Firmware\CMSIS\GD\GD32F30x\Source\IAR\startup_gd32f30x_hd.s</name>
         </file>
     </group>
 </project>

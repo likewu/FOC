@@ -77,9 +77,7 @@ int main(void)
     /* configure systick */
     systick_config();
     /* initilize the LEDs, USART and key */
-    gd_eval_led_init(LED2); 
-    gd_eval_led_init(LED3); 
-    gd_eval_led_init(LED4);
+    gd_eval_led_init(LED1);
     gd_eval_com_init(EVAL_COM1);
     gd_eval_key_init(KEY_WAKEUP, KEY_MODE_GPIO);
     
@@ -90,12 +88,12 @@ int main(void)
     printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
 
     while (1){
-        if(RESET == gd_eval_key_state_get(KEY_WAKEUP)){
-            gd_eval_led_on(LED3);
+        //if(RESET == gd_eval_key_state_get(KEY_WAKEUP)){
+            gd_eval_led_on(LED1);
             delay_1ms(500);
-            gd_eval_led_off(LED3);
-            gd_eval_led_toggle(LED4);
-        }
+            gd_eval_led_off(LED1);
+            //gd_eval_led_toggle(LED4);
+        //}
     }
 }
 

@@ -40,8 +40,8 @@ OF SUCH DAMAGE.
 
 /* private variables */
 static uint32_t GPIO_PORT[LEDn] = {LED2_GPIO_PORT, LED3_GPIO_PORT,
-                                   LED4_GPIO_PORT, LED5_GPIO_PORT};
-static uint32_t GPIO_PIN[LEDn] = {LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN};
+                                   LED4_GPIO_PORT, LED5_GPIO_PORT, LED1_GPIO_PORT};
+static uint32_t GPIO_PIN[LEDn] = {LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN, LED1_PIN};
 
 static rcu_periph_enum COM_CLK[COMn] = {EVAL_COM1_CLK, EVAL_COM2_CLK};
 static uint32_t COM_TX_PIN[COMn] = {EVAL_COM1_TX_PIN, EVAL_COM2_TX_PIN};

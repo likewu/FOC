@@ -50,7 +50,8 @@ typedef enum
     LED2 = 0,
     LED3 = 1,
     LED4 = 2,
-    LED5 = 3
+    LED5 = 3,
+	  LED1 = 4
 } led_typedef_enum;
 
 typedef enum 
@@ -68,7 +69,11 @@ typedef enum
 } keymode_typedef_enum;
 
 /* eval board low layer led */
-#define LEDn                             4U
+#define LEDn                             5U
+
+#define LED1_PIN                         GPIO_PIN_0
+#define LED1_GPIO_PORT                   GPIOA
+#define LED1_GPIO_CLK                    RCU_GPIOA
 
 #define LED2_PIN                         GPIO_PIN_0
 #define LED2_GPIO_PORT                   GPIOF
@@ -105,7 +110,7 @@ typedef enum
 #define KEYn                             4U
 
 /* wakeup push-button */
-#define WAKEUP_KEY_PIN                   GPIO_PIN_0
+#define WAKEUP_KEY_PIN                   GPIO_PIN_8
 #define WAKEUP_KEY_GPIO_PORT             GPIOA
 #define WAKEUP_KEY_GPIO_CLK              RCU_GPIOA
 #define WAKEUP_KEY_EXTI_LINE             EXTI_0
