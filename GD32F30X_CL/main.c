@@ -24,8 +24,8 @@
 #define ADC_PRE_PRIORITY (uint8_t)1
 #define ADC_SUB_PRIORITY (uint8_t)1
 
-#define RCU_TIMERxx RCU_TIMER2
-#define TIMERxx TIMER2
+#define RCU_TIMERxx RCU_TIMER0
+#define TIMERxx TIMER0
 #define rate 1199
 
 /*!
@@ -153,14 +153,14 @@ int main(void)
     timer_master_output_trigger_source_select(TIMERxx, TIMER_TRI_OUT_SRC_O3CPRE);      // 上升沿触发ADC
     */
     /* 配置死区 */
-    timer_bkdtpara.runoffstate = TIMER_ROS_STATE_DISABLE;
-    timer_bkdtpara.ideloffstate = TIMER_IOS_STATE_DISABLE;
+    /*timer_bkdtpara.runoffstate = TIMER_ROS_STATE_ENABLE;
+    timer_bkdtpara.ideloffstate = TIMER_IOS_STATE_ENABLE;
     timer_bkdtpara.protectmode = TIMER_CCHP_PROT_OFF;
-    timer_bkdtpara.deadtime = 0;//DEADTIME;
+    timer_bkdtpara.deadtime = 20;//DEADTIME;
     timer_bkdtpara.breakstate = TIMER_BREAK_DISABLE;
-    timer_bkdtpara.breakpolarity = TIMER_BREAK_POLARITY_HIGH;
-    timer_bkdtpara.outputautostate = TIMER_OUTAUTO_DISABLE;
-    timer_break_config(TIMERxx, &timer_bkdtpara);
+    timer_bkdtpara.breakpolarity = TIMER_BREAK_POLARITY_LOW;
+    timer_bkdtpara.outputautostate = TIMER_OUTAUTO_ENABLE;
+    timer_break_config(TIMERxx, &timer_bkdtpara);*/
 
     /* 多电机控制同步用的 */
     /*timer_input_trigger_source_select(TIMERxx, TIMER_SMCFG_TRGSEL_ITI1);
@@ -179,7 +179,7 @@ int main(void)
     */
     //timer_update_source_config(TIMERxx, TIMER_UPDATE_SRC_REGULAR);
     //timer_single_pulse_mode_config(TIMERxx, TIMER_SP_MODE_REPETITIVE);
-    //timer_primary_output_config(TIMERxx, ENABLE);
+    timer_primary_output_config(TIMERxx, ENABLE);
     timer_auto_reload_shadow_enable(TIMERxx);
     timer_enable(TIMERxx);
 
