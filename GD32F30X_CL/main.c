@@ -72,7 +72,8 @@ int main(void)
     systick_config();
     /* initilize the LEDs, USART and key */
     gd_eval_led_init(LED1);
-    //gd_eval_com_init(EVAL_COM1);  //PA9 PA10
+    //AFIO_PCF0|=1<<2;  //UART0 PB6 PB7
+    gd_eval_com_init(EVAL_COM1);  //PA9 PA10
     //gd_eval_key_init(KEY_WAKEUP, KEY_MODE_GPIO);  //PA8
 
     /* print out the clock frequency of system, AHB, APB1 and APB2 */
