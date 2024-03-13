@@ -77,6 +77,7 @@ int main(void)
     /************************************* step0: 开启时钟 *******************************************/
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
+    rcu_periph_clock_enable(RCU_GPIOE);
 		rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_TIMERxx);
     rcu_periph_clock_enable(RCU_ADC0);
@@ -96,7 +97,11 @@ int main(void)
     
     /************************************* step1: GPIO配置 *******************************************/
     /* 配置6路PWM的IO */
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
+		//gpio_pin_remap_config(GPIO_TIMER0_PARTIAL_REMAP, ENABLE);
+    //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
+    //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
+    //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
+		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
 		
