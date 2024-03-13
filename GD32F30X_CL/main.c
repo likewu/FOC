@@ -24,6 +24,10 @@
 #define ADC_PRE_PRIORITY (uint8_t)1
 #define ADC_SUB_PRIORITY (uint8_t)1
 
+#define RCU_TIMERxx RCU_TIMER2
+#define TIMERxx TIMER2
+#define rate 1199
+
 /*!
     \brief      toggle the led every 500ms
     \param[in]  none
@@ -62,6 +66,8 @@ int main(void)
     timer_oc_parameter_struct timer_ocintpara;
     timer_break_parameter_struct timer_bkdtpara;
 	
+	  uint32_t i;
+	
     /* configure systick */
     systick_config();
     /* initilize the LEDs, USART and key */
@@ -76,116 +82,121 @@ int main(void)
     printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
 
     
-    /************************************* step0: ø™∆Ù ±÷” *******************************************/
+    /************************************* step0: ÂºÄÂêØÊó∂Èíü *******************************************/
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
 		rcu_periph_clock_enable(RCU_AF);
-    rcu_periph_clock_enable(RCU_TIMER0);
+    rcu_periph_clock_enable(RCU_TIMERxx);
     rcu_periph_clock_enable(RCU_ADC0);
     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV2);
     
-    /************************************* step1: GPIO≈‰÷√ *******************************************/
-    /* ≈‰÷√6¬∑PWMµƒIO */
+    /************************************* step1: GPIOÈÖçÁΩÆ *******************************************/
+    /* ÈÖçÁΩÆ6Ë∑ØPWMÁöÑIO */
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+		
+		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
+		gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
 
-    /* «˝∂Ø πƒ‹ */
+    /* È©±Âä®‰ΩøËÉΩ */
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5);
     gpio_bit_reset(GPIOA, GPIO_PIN_5);
     
-    /* ≈‰÷√µÁ¡˜≤…—˘µƒIO */
+    /* ÈÖçÁΩÆÁîµÊµÅÈááÊ†∑ÁöÑIO */
     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
 
 
-    /************************************* step2: timer≈‰÷√ ******************************************/
-    timer_deinit(TIMER0);
-    timer_initpara.prescaler = PWM_PRSC;
-    timer_initpara.alignedmode = TIMER_COUNTER_CENTER_DOWN;
-    timer_initpara.period = HALF_PWM_PERIOD;          /* ≈‰÷√»˝œ‡«≈ø™πÿ∆µ¬  */
-    timer_initpara.clockdivision = TIMER_CKDIV_DIV2;  /* À¿«¯ ±º‰º∆À„”√µΩµƒ∑÷∆µ */
-    timer_initpara.repetitioncounter = 1;                /* ÷ÿ∏¥º∆ ˝∆˜, ”∞œÏ∏¸–¬ ¬º˛µƒ∆µ¬  */
-    timer_init(TIMER0, &timer_initpara);
+    /************************************* step2: timerÈÖçÁΩÆ ******************************************/
+    timer_deinit(TIMERxx);
+    timer_initpara.prescaler = 2;//PWM_PRSC;
+    timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
+		timer_initpara.counterdirection = TIMER_COUNTER_UP;
+    timer_initpara.period = 1199;//HALF_PWM_PERIOD;          /* ÈÖçÁΩÆ‰∏âÁõ∏Ê°•ÂºÄÂÖ≥È¢ëÁéá */
+    timer_initpara.clockdivision = TIMER_CKDIV_DIV1;  /* Ê≠ªÂå∫Êó∂Èó¥ËÆ°ÁÆóÁî®Âà∞ÁöÑÂàÜÈ¢ë */
+    timer_initpara.repetitioncounter = 1;                /* ÈáçÂ§çËÆ°Êï∞Âô®, ÂΩ±ÂìçÊõ¥Êñ∞‰∫ã‰ª∂ÁöÑÈ¢ëÁéá */
+    timer_init(TIMERxx, &timer_initpara);
     
     timer_ocintpara.outputstate = TIMER_CCX_ENABLE;
-    timer_ocintpara.outputnstate = TIMER_CCXN_ENABLE;
+    timer_ocintpara.outputnstate = TIMER_CCXN_DISABLE;
     timer_ocintpara.ocpolarity = TIMER_OC_POLARITY_HIGH;     
     timer_ocintpara.ocnpolarity = TIMER_OCN_POLARITY_HIGH;
     timer_ocintpara.ocidlestate = TIMER_OC_IDLE_STATE_LOW;
     timer_ocintpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
     
-    timer_channel_output_config(TIMER0, TIMER_CH_0,&timer_ocintpara);
-    timer_channel_output_config(TIMER0, TIMER_CH_1,&timer_ocintpara);
-    timer_channel_output_config(TIMER0, TIMER_CH_2,&timer_ocintpara);
+    timer_channel_output_config(TIMERxx, TIMER_CH_0,&timer_ocintpara);
+    timer_channel_output_config(TIMERxx, TIMER_CH_1,&timer_ocintpara);
+    timer_channel_output_config(TIMERxx, TIMER_CH_2,&timer_ocintpara);
     
     timer_ocintpara.outputstate = TIMER_CCX_ENABLE;
     timer_ocintpara.ocpolarity = TIMER_OC_POLARITY_HIGH;
     timer_ocintpara.ocidlestate = TIMER_OC_IDLE_STATE_LOW;
-    timer_channel_output_config(TIMER0, TIMER_CH_3,&timer_ocintpara);
+    timer_channel_output_config(TIMERxx, TIMER_CH_3,&timer_ocintpara);
     
     /* channel1~3 */
-    timer_channel_output_pulse_value_config(TIMER0, TIMER_CH_0, HALF_PWM_PERIOD/2);
-    timer_channel_output_mode_config(TIMER0, TIMER_CH_0, TIMER_OC_MODE_PWM1);
-    timer_channel_output_shadow_config(TIMER0, TIMER_CH_0, TIMER_OC_SHADOW_ENABLE);   /* ‘§◊∞‘ÿ πƒ‹ */
-    timer_channel_output_pulse_value_config(TIMER0, TIMER_CH_1, HALF_PWM_PERIOD/2);
-    timer_channel_output_mode_config(TIMER0, TIMER_CH_1, TIMER_OC_MODE_PWM1);
-    timer_channel_output_shadow_config(TIMER0, TIMER_CH_1, TIMER_OC_SHADOW_ENABLE);   /* ‘§◊∞‘ÿ πƒ‹ */
-    timer_channel_output_pulse_value_config(TIMER0, TIMER_CH_2, HALF_PWM_PERIOD/2);
-    timer_channel_output_mode_config(TIMER0, TIMER_CH_2, TIMER_OC_MODE_PWM1);
-    timer_channel_output_shadow_config(TIMER0, TIMER_CH_2, TIMER_OC_SHADOW_ENABLE);   /* ‘§◊∞‘ÿ πƒ‹ */
+    timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_0, 30/*HALF_PWM_PERIOD/2*/);
+    timer_channel_output_mode_config(TIMERxx, TIMER_CH_0, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMERxx, TIMER_CH_0, TIMER_OC_SHADOW_DISABLE);   /* È¢ÑË£ÖËΩΩ‰ΩøËÉΩ */
+    timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_1, 30/*HALF_PWM_PERIOD/2*/);
+    timer_channel_output_mode_config(TIMERxx, TIMER_CH_1, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMERxx, TIMER_CH_1, TIMER_OC_SHADOW_DISABLE);   /* È¢ÑË£ÖËΩΩ‰ΩøËÉΩ */
+    timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_2, 30/*HALF_PWM_PERIOD/2*/);
+    timer_channel_output_mode_config(TIMERxx, TIMER_CH_2, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMERxx, TIMER_CH_2, TIMER_OC_SHADOW_DISABLE);   /* È¢ÑË£ÖËΩΩ‰ΩøËÉΩ */
     
-    /* channel4 …Ë÷√, ¥•∑¢ADC”√ */
-    timer_channel_output_pulse_value_config(TIMER0, TIMER_CH_3, 5);
-    timer_channel_output_mode_config(TIMER0, TIMER_CH_3, TIMER_OC_MODE_PWM0);
-    timer_channel_output_shadow_config(TIMER0, TIMER_CH_3, TIMER_OC_SHADOW_ENABLE);   /* ‘§◊∞‘ÿ πƒ‹ */
-    timer_master_output_trigger_source_select(TIMER0, TIMER_TRI_OUT_SRC_O3CPRE);      /* …œ…˝—ÿ¥•∑¢ADC */
-    
-    /* ≈‰÷√À¿«¯ */
-    timer_bkdtpara.runoffstate = TIMER_ROS_STATE_ENABLE;
-    timer_bkdtpara.ideloffstate = TIMER_IOS_STATE_ENABLE;
-    timer_bkdtpara.protectmode = TIMER_CCHP_PROT_0;
-    timer_bkdtpara.deadtime = DEADTIME;
+    /* channel4 ËÆæÁΩÆ, Ëß¶ÂèëADCÁî® */
+    /*timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_3, 5);
+    timer_channel_output_mode_config(TIMERxx, TIMER_CH_3, TIMER_OC_MODE_PWM0);
+    timer_channel_output_shadow_config(TIMERxx, TIMER_CH_3, TIMER_OC_SHADOW_ENABLE);   // È¢ÑË£ÖËΩΩ‰ΩøËÉΩ
+    timer_master_output_trigger_source_select(TIMERxx, TIMER_TRI_OUT_SRC_O3CPRE);      // ‰∏äÂçáÊ≤øËß¶ÂèëADC
+    */
+    /* ÈÖçÁΩÆÊ≠ªÂå∫ */
+    timer_bkdtpara.runoffstate = TIMER_ROS_STATE_DISABLE;
+    timer_bkdtpara.ideloffstate = TIMER_IOS_STATE_DISABLE;
+    timer_bkdtpara.protectmode = TIMER_CCHP_PROT_OFF;
+    timer_bkdtpara.deadtime = 0;//DEADTIME;
     timer_bkdtpara.breakstate = TIMER_BREAK_DISABLE;
-    timer_bkdtpara.breakpolarity = TIMER_BREAK_POLARITY_LOW;
+    timer_bkdtpara.breakpolarity = TIMER_BREAK_POLARITY_HIGH;
     timer_bkdtpara.outputautostate = TIMER_OUTAUTO_DISABLE;
-    timer_break_config(TIMER0, &timer_bkdtpara);
+    timer_break_config(TIMERxx, &timer_bkdtpara);
 
-    /* ∂‡µÁª˙øÿ÷∆Õ¨≤Ω”√µƒ */
-    timer_input_trigger_source_select(TIMER0, TIMER_SMCFG_TRGSEL_ITI1);
-    timer_slave_mode_select(TIMER0, TIMER_SLAVE_MODE_EVENT);
-    timer_event_software_generate(TIMER0, TIMER_EVENT_SRC_UPG);
-    timer_counter_value_config(TIMER0, 0);
+    /* Â§öÁîµÊú∫ÊéßÂà∂ÂêåÊ≠•Áî®ÁöÑ */
+    /*timer_input_trigger_source_select(TIMERxx, TIMER_SMCFG_TRGSEL_ITI1);
+    timer_slave_mode_select(TIMERxx, TIMER_SLAVE_MODE_EVENT);
+    timer_event_software_generate(TIMERxx, TIMER_EVENT_SRC_UPG);
+    timer_counter_value_config(TIMERxx, 0);
+    */
+    /* Âè™ÈúÄË¶ÅCC4‰ΩøËÉΩ */
+    /*timer_channel_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCX_DISABLE);
+    timer_channel_output_state_config(TIMERxx, TIMER_CH_1, TIMER_CCX_DISABLE);
+    timer_channel_output_state_config(TIMERxx, TIMER_CH_2, TIMER_CCX_DISABLE);
+    timer_channel_output_state_config(TIMERxx, TIMER_CH_3, TIMER_CCX_ENABLE);
+    timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCXN_DISABLE);
+    timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_1, TIMER_CCXN_DISABLE);
+    timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_2, TIMER_CCXN_DISABLE);
+    */
+    //timer_update_source_config(TIMERxx, TIMER_UPDATE_SRC_REGULAR);
+    //timer_single_pulse_mode_config(TIMERxx, TIMER_SP_MODE_REPETITIVE);
+    //timer_primary_output_config(TIMERxx, ENABLE);
+    timer_auto_reload_shadow_enable(TIMERxx);
+    timer_enable(TIMERxx);
 
-    /* ÷ª–Ë“™CC4 πƒ‹ */
-    timer_channel_output_state_config(TIMER0, TIMER_CH_0, TIMER_CCX_DISABLE);
-    timer_channel_output_state_config(TIMER0, TIMER_CH_1, TIMER_CCX_DISABLE);
-    timer_channel_output_state_config(TIMER0, TIMER_CH_2, TIMER_CCX_DISABLE);
-    timer_channel_output_state_config(TIMER0, TIMER_CH_3, TIMER_CCX_ENABLE);
-    timer_channel_complementary_output_state_config(TIMER0, TIMER_CH_0, TIMER_CCXN_DISABLE);
-    timer_channel_complementary_output_state_config(TIMER0, TIMER_CH_1, TIMER_CCXN_DISABLE);
-    timer_channel_complementary_output_state_config(TIMER0, TIMER_CH_2, TIMER_CCXN_DISABLE);
+    //dbg_periph_enable(DBG_TIMER0_HOLD);
 
-    timer_update_source_config(TIMER0, TIMER_UPDATE_SRC_REGULAR);
-    timer_single_pulse_mode_config(TIMER0, TIMER_SP_MODE_REPETITIVE);
-    timer_primary_output_config(TIMER0,ENABLE);
-    timer_auto_reload_shadow_enable(TIMER0);
-    timer_enable(TIMER0);
-
-    dbg_periph_enable(DBG_TIMER0_HOLD);
-
-    /************************************** step3: adc≈‰÷√ *******************************************/
-    adc_deinit(ADC0);
+    /************************************** step3: adcÈÖçÁΩÆ *******************************************/
+    /*adc_deinit(ADC0);
     adc_special_function_config(ADC0, ADC_SCAN_MODE, ENABLE);
     adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
     adc_external_trigger_source_config(ADC0, ADC_REGULAR_CHANNEL, ADC0_1_2_EXTTRIG_REGULAR_NONE); 
     adc_data_alignment_config(ADC0, ADC_DATAALIGN_RIGHT);
-
-    /* ◊¢»Î◊È≈‰÷√ */
-    adc_channel_length_config(ADC0, ADC_INSERTED_CHANNEL, 2);
-    adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_1, ADC_SAMPLETIME_7POINT5);         /* Aœ‡µÁ¡˜ */
-    adc_inserted_channel_config(ADC0, 1, ADC_CHANNEL_2, ADC_SAMPLETIME_7POINT5);         /* Bœ‡µÁ¡˜ */
-
+    */
+    /* Ê≥®ÂÖ•ÁªÑÈÖçÁΩÆ */
+    /*adc_channel_length_config(ADC0, ADC_INSERTED_CHANNEL, 2);
+    adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_1, ADC_SAMPLETIME_7POINT5);         // AÁõ∏ÁîµÊµÅ
+    adc_inserted_channel_config(ADC0, 1, ADC_CHANNEL_2, ADC_SAMPLETIME_7POINT5);         // BÁõ∏ÁîµÊµÅ
+    
     adc_external_trigger_source_config(ADC0, ADC_INSERTED_CHANNEL, ADC0_1_EXTTRIG_INSERTED_T0_CH3); 
     adc_external_trigger_config(ADC0, ADC_INSERTED_CHANNEL, ENABLE);
 
@@ -195,14 +206,35 @@ int main(void)
     
     adc_interrupt_enable(ADC0, ADC_INT_EOIC);
     nvic_irq_enable(ADC0_1_IRQn, ADC_PRE_PRIORITY, ADC_SUB_PRIORITY);
-    
-    
+    */
+		
+    TIMER_CHCTL2(TIMERxx)|=0x0111;
+		TIMER_CH0CV(TIMERxx)=500;
+		TIMER_CH1CV(TIMERxx)=500;
+		TIMER_CH2CV(TIMERxx)=500;
     while(1) {
+			for (i=0;i<rate+1;i=i+8){
+				TIMER_CH0CV(TIMERxx)=i;
+				TIMER_CH1CV(TIMERxx)=rate-i;
+				TIMER_CH2CV(TIMERxx)=rate-i;
+				if (i%12==0)
+				  gd_eval_led_toggle(LED1);
+				delay_1ms(25);
+			}
+			for (i=rate+1;i>0;i=i-8){
+				TIMER_CH0CV(TIMERxx)=i;
+				TIMER_CH1CV(TIMERxx)=rate-i;
+				TIMER_CH2CV(TIMERxx)=rate-i;
+				if (i%12==0)
+				  gd_eval_led_toggle(LED1);
+				delay_1ms(25);
+			}
+			
         //if(RESET == gd_eval_key_state_get(KEY_WAKEUP)) {
-            gd_eval_led_on(LED1);
-            delay_1ms(500);
-            gd_eval_led_off(LED1);
-            delay_1ms(500);
+            //gd_eval_led_on(LED1);
+            //delay_1ms(500);
+            //gd_eval_led_off(LED1);
+            //delay_1ms(500);
         //}
     }
 }
