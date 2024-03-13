@@ -24,8 +24,8 @@
 #define ADC_PRE_PRIORITY (uint8_t)1
 #define ADC_SUB_PRIORITY (uint8_t)1
 
-#define RCU_TIMERxx RCU_TIMER0
-#define TIMERxx TIMER0
+#define RCU_TIMERxx RCU_TIMER7
+#define TIMERxx TIMER7
 #define rate 1199
 
 /*!
@@ -77,7 +77,7 @@ int main(void)
     /************************************* step0: 开启时钟 *******************************************/
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
-    rcu_periph_clock_enable(RCU_GPIOE);
+    rcu_periph_clock_enable(RCU_GPIOC);
 		rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_TIMERxx);
     rcu_periph_clock_enable(RCU_ADC0);
@@ -101,9 +101,9 @@ int main(void)
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
-		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
-    gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
+		gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+    gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
+    gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
 		
 		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
 		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
