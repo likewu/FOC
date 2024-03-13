@@ -74,13 +74,6 @@ int main(void)
     gd_eval_led_init(LED1);
     //gd_eval_key_init(KEY_WAKEUP, KEY_MODE_GPIO);  //PA8
 
-    /* print out the clock frequency of system, AHB, APB1 and APB2 */
-    //printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
-    //printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
-    //printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
-    //printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
-
-    
     /************************************* step0: 开启时钟 *******************************************/
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
@@ -90,10 +83,16 @@ int main(void)
     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV2);
 		
 		//AFIO_PCF0|=1<<2;  //UART0 PB6 PB7
-    gpio_pin_remap_config(GPIO_USART0_REMAP, ENABLE);  //UART0 PB6 PB7
-    gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
-    gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
+    //gpio_pin_remap_config(GPIO_USART0_REMAP, ENABLE);  //UART0 PB6 PB7
+    //gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+    //gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
     gd_eval_com_init(EVAL_COM1);  //PA9 PA10
+		
+		/* print out the clock frequency of system, AHB, APB1 and APB2 */
+    printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
+    printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
+    printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
+    printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
     
     /************************************* step1: GPIO配置 *******************************************/
     /* 配置6路PWM的IO */
