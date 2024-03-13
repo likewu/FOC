@@ -147,36 +147,36 @@ int main(void)
     timer_channel_output_shadow_config(TIMERxx, TIMER_CH_2, TIMER_OC_SHADOW_DISABLE);   /* 预装载使能 */
     
     /* channel4 设置, 触发ADC用 */
-    /*timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_3, 5);
+    timer_channel_output_pulse_value_config(TIMERxx, TIMER_CH_3, 5);
     timer_channel_output_mode_config(TIMERxx, TIMER_CH_3, TIMER_OC_MODE_PWM0);
     timer_channel_output_shadow_config(TIMERxx, TIMER_CH_3, TIMER_OC_SHADOW_ENABLE);   // 预装载使能
     timer_master_output_trigger_source_select(TIMERxx, TIMER_TRI_OUT_SRC_O3CPRE);      // 上升沿触发ADC
-    */
+    
     /* 配置死区 */
-    /*timer_bkdtpara.runoffstate = TIMER_ROS_STATE_ENABLE;
+    timer_bkdtpara.runoffstate = TIMER_ROS_STATE_ENABLE;
     timer_bkdtpara.ideloffstate = TIMER_IOS_STATE_ENABLE;
     timer_bkdtpara.protectmode = TIMER_CCHP_PROT_OFF;
-    timer_bkdtpara.deadtime = 20;//DEADTIME;
+    timer_bkdtpara.deadtime = 21;//DEADTIME;
     timer_bkdtpara.breakstate = TIMER_BREAK_DISABLE;
     timer_bkdtpara.breakpolarity = TIMER_BREAK_POLARITY_LOW;
     timer_bkdtpara.outputautostate = TIMER_OUTAUTO_ENABLE;
-    timer_break_config(TIMERxx, &timer_bkdtpara);*/
+    timer_break_config(TIMERxx, &timer_bkdtpara);
 
     /* 多电机控制同步用的 */
-    /*timer_input_trigger_source_select(TIMERxx, TIMER_SMCFG_TRGSEL_ITI1);
+    timer_input_trigger_source_select(TIMERxx, TIMER_SMCFG_TRGSEL_ITI1);
     timer_slave_mode_select(TIMERxx, TIMER_SLAVE_MODE_EVENT);
     timer_event_software_generate(TIMERxx, TIMER_EVENT_SRC_UPG);
     timer_counter_value_config(TIMERxx, 0);
-    */
+    
     /* 只需要CC4使能 */
-    /*timer_channel_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCX_DISABLE);
+    timer_channel_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCX_DISABLE);
     timer_channel_output_state_config(TIMERxx, TIMER_CH_1, TIMER_CCX_DISABLE);
     timer_channel_output_state_config(TIMERxx, TIMER_CH_2, TIMER_CCX_DISABLE);
     timer_channel_output_state_config(TIMERxx, TIMER_CH_3, TIMER_CCX_ENABLE);
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCXN_DISABLE);
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_1, TIMER_CCXN_DISABLE);
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_2, TIMER_CCXN_DISABLE);
-    */
+    
     //timer_update_source_config(TIMERxx, TIMER_UPDATE_SRC_REGULAR);
     //timer_single_pulse_mode_config(TIMERxx, TIMER_SP_MODE_REPETITIVE);
     timer_primary_output_config(TIMERxx, ENABLE);
@@ -186,12 +186,12 @@ int main(void)
     //dbg_periph_enable(DBG_TIMER0_HOLD);
 
     /************************************** step3: adc配置 *******************************************/
-    /*adc_deinit(ADC0);
+    adc_deinit(ADC0);
     adc_special_function_config(ADC0, ADC_SCAN_MODE, ENABLE);
     adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
     adc_external_trigger_source_config(ADC0, ADC_REGULAR_CHANNEL, ADC0_1_2_EXTTRIG_REGULAR_NONE); 
     adc_data_alignment_config(ADC0, ADC_DATAALIGN_RIGHT);
-    */
+    
     /* 注入组配置 */
     /*adc_channel_length_config(ADC0, ADC_INSERTED_CHANNEL, 2);
     adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_1, ADC_SAMPLETIME_7POINT5);         // A相电流
