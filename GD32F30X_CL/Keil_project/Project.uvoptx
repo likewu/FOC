@@ -159,6 +159,18 @@
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint/>
+      <WatchWindow1>
+        <Ww>
+          <count>0</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>TIMER_CHCTL2(((((uint32_t)0x40000000U) + 0x00000000U) + 0x00012C00U))</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>TIMER_CH1CV(((((uint32_t)0x40000000U) + 0x00000000U) + 0x00012C00U))</ItemText>
+        </Ww>
+      </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>

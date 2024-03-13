@@ -72,14 +72,14 @@ int main(void)
     systick_config();
     /* initilize the LEDs, USART and key */
     gd_eval_led_init(LED1);
-    gd_eval_com_init(EVAL_COM1);
-    //gd_eval_key_init(KEY_WAKEUP, KEY_MODE_GPIO);
+    //gd_eval_com_init(EVAL_COM1);  //PA9 PA10
+    //gd_eval_key_init(KEY_WAKEUP, KEY_MODE_GPIO);  //PA8
 
     /* print out the clock frequency of system, AHB, APB1 and APB2 */
-    printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
-    printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
-    printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
-    printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
+    //printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
+    //printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
+    //printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
+    //printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
 
     
     /************************************* step0: 开启时钟 *******************************************/
@@ -222,9 +222,9 @@ int main(void)
 				delay_1ms(25);
 			}
 			for (i=rate+1;i>0;i=i-8){
-				TIMER_CH0CV(TIMERxx)=i;
-				TIMER_CH1CV(TIMERxx)=rate-i;
-				TIMER_CH2CV(TIMERxx)=rate-i;
+				TIMER_CH0CV(TIMERxx)=i-1;
+				TIMER_CH1CV(TIMERxx)=rate-i+1;
+				TIMER_CH2CV(TIMERxx)=rate-i+1;
 				if (i%12==0)
 				  gd_eval_led_toggle(LED1);
 				delay_1ms(25);
