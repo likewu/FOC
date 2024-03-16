@@ -43,7 +43,7 @@ uint8_t GetBldcHall(void)
 //  电机驱动
 void BldcMove( BldcMotor_t *motor )
 {
-  //return ;
+  return ;
 
 	static uint8_t prehall = 0;
 	motor->Hall = GetBldcHall();

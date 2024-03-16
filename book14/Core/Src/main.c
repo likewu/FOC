@@ -139,23 +139,28 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint32_t i;
-  TIM1->CCER|=0x0111;
+  //TIM1->CCER|=0x0111;
+  HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    /*for (int i=0;i<rate;i=i+3){
+    /*for (int i=0;i<rate+1;i=i+8){
       TIM1->CCR1=i;
       TIM1->CCR2=rate-i;
       TIM1->CCR3=rate-i;
-      HAL_Delay(10);
+      if (i%12==0)
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+      HAL_Delay(25);
     }
-    for (int i=rate;i>0;i=i-3){
+    for (int i=rate+1;i>0;i=i-8){
       TIM1->CCR1=i;
-      TIM1->CCR2=rate-i;
-      TIM1->CCR3=rate-i;
-      HAL_Delay(10);
+      TIM1->CCR2=rate-i+1;
+      TIM1->CCR3=rate-i+1;
+      if (i%12==0)
+        HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+      HAL_Delay(25);
     }*/
 
     *(uint16_t *)tx = mymotor.Current;
@@ -387,11 +392,11 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 2;
+  htim1.Init.Prescaler = 72-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 1199;
+  htim1.Init.Period = 1000-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 1;
+  htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
   {
@@ -414,6 +419,8 @@ static void MX_TIM1_Init(void)
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
   sConfigOC.Pulse = 500;
+  //sConfigOC.OutputState = TIM_OUTPUTSTATE_ENABLE;
+  //sConfigOC.OutputNState = TIM_OUTPUTNSTATE_ENABLE;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -432,13 +439,13 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_ENABLE;
+  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_ENABLE;
+  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_2;
+  sBreakDeadTimeConfig.DeadTime = 0xAC;   //3us
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_ENABLE;
   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
   {
     Error_Handler();
@@ -446,8 +453,59 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
-  HAL_TIM_MspPostInit(&htim1);
+  HAL_TIM_MspPostInit(&htim1);   //PA8 PA9 PA10  PB13 PB14 PB15
 
+  /*##-5- Start signals generation ###########################################*/
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 1 */
+  if(HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 1N */
+  if(HAL_TIMEx_OCN_Start(&htim1, TIM_CHANNEL_1) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 2 */
+  if(HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 2N */
+  if(HAL_TIMEx_OCN_Start(&htim1, TIM_CHANNEL_2) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 3 */
+  if(HAL_TIM_OC_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 3N */
+  if(HAL_TIMEx_OCN_Start(&htim1, TIM_CHANNEL_3) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+  TIM1->CCR1 = 100-1;
+  TIM1->CCR2 = 100-1;
+  TIM1->CCR3 = 100-1;
 }
 
 /**
