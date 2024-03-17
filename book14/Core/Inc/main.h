@@ -64,8 +64,8 @@ uint16_t getCurrent( void );
 /* USER CODE END Prototypes */
 
 /* Private defines -----------------------------------------------------------*/
-#define B1_Pin GPIO_PIN_13
-#define B1_GPIO_Port GPIOC
+#define B1_Pin GPIO_PIN_8
+#define B1_GPIO_Port GPIOA
 #define B1_EXTI_IRQn EXTI15_10_IRQn
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
@@ -80,7 +80,13 @@ uint16_t getCurrent( void );
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+#define CANx                           CAN1
 
+/* Definition for CANx Pins */
+#define CANx_TX_PIN                    GPIO_PIN_9
+#define CANx_TX_GPIO_PORT              GPIOB
+#define CANx_RX_PIN                    GPIO_PIN_8
+#define CANx_RX_GPIO_PORT              GPIOB
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

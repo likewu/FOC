@@ -59,7 +59,7 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
-
+extern CAN_HandleTypeDef    CanHandle;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -311,5 +311,13 @@ void EXTI15_10_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-
+/**
+* @brief  This function handles CAN1 RX0 interrupt request.
+* @param  None
+* @retval None
+*/
+void CANx_RX_IRQHandler(void)
+{
+  HAL_CAN_IRQHandler(&CanHandle);
+}
 /* USER CODE END 1 */
