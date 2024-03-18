@@ -41,7 +41,15 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+#define B1_Pin GPIO_PIN_8
+#define B1_GPIO_Port GPIOA
+#define B1_EXTI_IRQn EXTI15_10_IRQn
+#define LD2_Pin GPIO_PIN_0
+#define LD2_GPIO_Port GPIOA
+#define USART_TX_Pin GPIO_PIN_2
+#define USART_TX_GPIO_Port GPIOA
+#define USART_RX_Pin GPIO_PIN_3
+#define USART_RX_GPIO_Port GPIOA
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

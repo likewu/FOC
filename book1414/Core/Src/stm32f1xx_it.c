@@ -211,9 +211,9 @@ void TIM8_UP_IRQHandler(void)
 #else
   static uint8_t cnt = 0;
 
-  if( __HAL_TIM_GET_FLAG( &htim1, TIM_FLAG_UPDATE ) != RESET )
+  if( __HAL_TIM_GET_FLAG( &htim8, TIM_FLAG_UPDATE ) != RESET )
   {
-      __HAL_TIM_CLEAR_IT( &htim1, TIM_IT_UPDATE);
+      __HAL_TIM_CLEAR_IT( &htim8, TIM_IT_UPDATE);
 
       // 每10ms 执行一次速度闭环控制,这里演示的是直接速度环，还可以速度环内嵌电流环方式实现，
       // 一样可以实现速度闭环控制

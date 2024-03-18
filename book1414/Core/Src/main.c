@@ -45,9 +45,22 @@
 
 TIM_HandleTypeDef htim8;
 
+UART_HandleTypeDef huart2;
+
 /* USER CODE BEGIN PV */
 #define KEY_PRESSED     0x00
 #define KEY_NOT_PRESSED 0x01
+
+uint8_t ubKeyNumber = 0x0;
+CAN_HandleTypeDef     CanHandle;
+CAN_TxHeaderTypeDef   TxHeader;
+CAN_RxHeaderTypeDef   RxHeader;
+uint8_t               TxData[8];
+uint8_t               RxData[8];
+uint32_t              TxMailbox;
+
+uint16_t adcTemp[64];
+uint16_t getCurrent( void );
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,6 +68,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM8_Init(void);
 static void MX_CAN_Init(void);
+static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -72,6 +86,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
   uint8_t tx[10];
+  int16_t speed;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -93,7 +108,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM8_Init();
-  MX_CAN_Init();
+  MX_USART2_UART_Init();
+  //MX_CAN_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -144,8 +160,8 @@ int main(void)
         HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
         
         /* Set the data to be transmitted */
-        TxData[0] = ubKeyNumber;
-        TxData[1] = 0xAD;
+        //TxData[0] = ubKeyNumber;
+        //TxData[1] = 0xAD;
         
         /* Start the Transmission process */
         /*if (HAL_CAN_AddTxMessage(&CanHandle, &TxHeader, TxData, &TxMailbox) != HAL_OK)
@@ -231,9 +247,87 @@ static void MX_CAN_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN CAN_Init 2 */
+  /* Start the CAN peripheral */
+  if (HAL_CAN_Start(&CanHandle) != HAL_OK)
+  {
+    /* Start Error */
+    Error_Handler();
+  }
 
+  /* Activate CAN RX notification */
+  if (HAL_CAN_ActivateNotification(&CanHandle, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  {
+    /* Notification Error */
+    Error_Handler();
+  }
+
+  /* Configure Transmission process */
+  TxHeader.StdId = 0x321;
+  TxHeader.ExtId = 0x01;
+  TxHeader.RTR = CAN_RTR_DATA;
+  TxHeader.IDE = CAN_ID_STD;
+  TxHeader.DLC = 2;
+  TxHeader.TransmitGlobalTime = DISABLE;
   /* USER CODE END CAN_Init 2 */
 
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * @brief  Rx Fifo 0 message pending callback in non blocking mode
+  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
+  *         the configuration information for the specified CAN.
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
+{
+  /* Get RX message */
+  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  {
+    /* Reception Error */
+    Error_Handler();
+  }
+
+  /* Display LEDx */
+  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
+    HAL_Delay(15);
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+    ubKeyNumber = RxData[0];
+  }
 }
 
 /**
@@ -317,6 +411,57 @@ static void MX_TIM8_Init(void)
   /* USER CODE END TIM8_Init 2 */
   HAL_TIM_MspPostInit(&htim8);
 
+  /*##-5- Start signals generation ###########################################*/
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 1 */
+  if(HAL_TIM_OC_Start(&htim8, TIM_CHANNEL_1) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 1N */
+  if(HAL_TIMEx_OCN_Start(&htim8, TIM_CHANNEL_1) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 2 */
+  if(HAL_TIM_OC_Start(&htim8, TIM_CHANNEL_2) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 2N */
+  if(HAL_TIMEx_OCN_Start(&htim8, TIM_CHANNEL_2) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+
+  /*--------------------------------------------------------------------------*/
+  /* Start channel 3 */
+  if(HAL_TIM_OC_Start(&htim8, TIM_CHANNEL_3) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /* Start channel 3N */
+  if(HAL_TIMEx_OCN_Start(&htim8, TIM_CHANNEL_3) != HAL_OK)
+  {
+    /* Starting Error */
+    Error_Handler();
+  }
+  /*--------------------------------------------------------------------------*/
+
+  //TIM1->CCR1 = 100-1;
+  //TIM1->CCR2 = 100-1;
+  //TIM1->CCR3 = 100-1;
 }
 
 /**
@@ -357,12 +502,38 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  //HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
 /* USER CODE BEGIN 4 */
+uint16_t getCurrent( void )
+{
+  uint8_t i,j=0;
+  uint32_t sum = 0;
+  uint16_t max = 0;
 
+#if 1
+
+  for( i = 0; i<64; i++ )
+  {
+    sum += adcTemp[i];
+  }
+  sum >>= 6;
+
+  return sum;
+
+#else
+
+  for( i = 0; i<64; i++ )
+  {
+    if( max < adcTemp[i] )  max = adcTemp[i];
+  }
+
+  return max;
+
+#endif
+}
 /* USER CODE END 4 */
 
 /**
