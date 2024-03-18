@@ -35,7 +35,10 @@
 #include "parameters_conversion.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "spi_pwm_encoder.h"
+#include "mc_position.h"
+#include "tle5012b.h"
+#include "abs_encoder_pos_fdbk.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private define */
