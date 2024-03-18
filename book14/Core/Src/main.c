@@ -115,25 +115,25 @@ int main(void)
   //Timer1_init();
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_ADC1_Init();
-  MX_TIM1_Init();
-  MX_TIM2_Init();
+  //MX_ADC1_Init();
+  //MX_TIM1_Init();
+  //MX_TIM2_Init();
   MX_USART2_UART_Init();
-  MX_ADC2_Init();
-  CAN_Config();
+  //MX_ADC2_Init();
+  //CAN_Config();
   /* USER CODE BEGIN 2 */
 
   //
   // ADC 校准
-  ADC1->CR2 |= ADC_CR2_ADON;
-  ADC1->CR2 |= ADC_CR2_CAL;
-  while ( ADC1->CR2 & ADC_CR2_CAL );
+  //ADC1->CR2 |= ADC_CR2_ADON;
+  //ADC1->CR2 |= ADC_CR2_CAL;
+  //while ( ADC1->CR2 & ADC_CR2_CAL );
 
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adcTemp, 64 );
-  HAL_ADC_Start(&hadc2);
+  //HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adcTemp, 64 );
+  //HAL_ADC_Start(&hadc2);
   //
   // 开始ADC转换
-  BldcStart( &mymotor, 200 );
+  //BldcStart( &mymotor, 200 );
 
 
   // 下面的KP,KI,KD参数根据自己的系统去微调
@@ -208,23 +208,22 @@ int main(void)
       }
       else
       {
-        HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET); 
+        HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
         
         /* Set the data to be transmitted */
         TxData[0] = ubKeyNumber;
         TxData[1] = 0xAD;
         
         /* Start the Transmission process */
-        if (HAL_CAN_AddTxMessage(&CanHandle, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+        /*if (HAL_CAN_AddTxMessage(&CanHandle, &TxHeader, TxData, &TxMailbox) != HAL_OK)
         {
-          /* Transmission request Error */
           Error_Handler();
         }
         HAL_Delay(10);
         
         while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != KEY_NOT_PRESSED)
         {
-        }
+        }*/
       }
     }
   }
@@ -675,14 +674,14 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
 
@@ -773,6 +772,31 @@ static void CAN_Config(void)
   TxHeader.IDE = CAN_ID_STD;
   TxHeader.DLC = 2;
   TxHeader.TransmitGlobalTime = DISABLE;
+}
+
+/**
+  * @brief  Rx Fifo 0 message pending callback in non blocking mode
+  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
+  *         the configuration information for the specified CAN.
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
+{
+  /* Get RX message */
+  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  {
+    /* Reception Error */
+    Error_Handler();
+  }
+
+  /* Display LEDx */
+  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
+    HAL_Delay(15);
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+    ubKeyNumber = RxData[0];
+  }
 }
 
 /* USER CODE BEGIN 4 */
