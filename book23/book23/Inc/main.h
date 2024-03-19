@@ -80,7 +80,10 @@ void Error_Handler(void);
 #define M1_PWM_WH_Pin GPIO_PIN_10
 #define M1_PWM_WH_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
-
+#define SPI_CS_Pin GPIO_PIN_4
+#define SPI_CS_GPIO_Port GPIOA
+#define VCC_ON_Pin GPIO_PIN_3
+#define VCC_ON_GPIO_Port GPIOB
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

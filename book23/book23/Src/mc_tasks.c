@@ -715,7 +715,7 @@ __weak void FOC_CalcCurrRef(uint8_t bMotor)
   #endif
     {
       FOCVars[bMotor].hTeref = STC_CalcTorqueReference(pSTC[bMotor]);
-      FOCVars[bMotor].Iqdref.qI_Component1 = FOCVars[bMotor].hTeref;
+      FOCVars[bMotor].Iqdref.q = FOCVars[bMotor].hTeref;
     }
   }
   //---End add---//

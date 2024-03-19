@@ -112,7 +112,7 @@ int main(void)
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
-  //HAL_GPIO_WritePin(VCC_ON_GPIO_Port,VCC_ON_Pin,GPIO_PIN_SET);  // 开驱动电源
+  HAL_GPIO_WritePin(VCC_ON_GPIO_Port,VCC_ON_Pin,GPIO_PIN_SET);  // 开驱动电源
 
   MC_ProgramSpeedRampMotor1(200/6,200);
   // MC_ProgramTorqueRampMotor1(100,200);
