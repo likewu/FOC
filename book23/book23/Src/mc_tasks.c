@@ -160,22 +160,24 @@ __weak void MCboot( MCI_Handle_t* pMCIList[NBR_OF_MOTORS],MCT_Handle_t* pMCTList
   /*   Main speed sensor component initialization       */
   /******************************************************/
   pSTC[M1] = &SpeednTorqCtrlM1;
-  STO_PLL_Init (&STO_PLL_M1);
+  //STO_PLL_Init (&STO_PLL_M1);
+  Abs_Encoder_Init(&Abs_Encoder_M1);
 
   /******************************************************/
   /*   Speed & torque component initialization          */
   /******************************************************/
-  STC_Init(pSTC[M1],pPIDSpeed[M1], &STO_PLL_M1._Super);
+  //STC_Init(pSTC[M1],pPIDSpeed[M1], &STO_PLL_M1._Super);
+  STC_Init(pSTC[M1],pPIDSpeed[M1], &Abs_Encoder_M1._Super);
 
   /****************************************************/
   /*   Virtual speed sensor component initialization  */
   /****************************************************/
-  VSS_Init (&VirtualSpeedSensorM1);
+  //VSS_Init (&VirtualSpeedSensorM1);
 
   /**************************************/
   /*   Rev-up component initialization  */
   /**************************************/
-  RUC_Init(&RevUpControlM1,pSTC[M1],&VirtualSpeedSensorM1, &STO_M1, pwmcHandle[M1]);
+  //RUC_Init(&RevUpControlM1,pSTC[M1],&VirtualSpeedSensorM1, &STO_M1, pwmcHandle[M1]);
 
   /********************************************************/
   /*   PID component initialization: current regulation   */
@@ -184,6 +186,16 @@ __weak void MCboot( MCI_Handle_t* pMCIList[NBR_OF_MOTORS],MCT_Handle_t* pMCTList
   PID_HandleInit(&PIDIdHandle_M1);
   pPIDIq[M1] = &PIDIqHandle_M1;
   pPIDId[M1] = &PIDIdHandle_M1;
+
+  //---Ken An Add---//
+  PID_HandleInit(&PIDAngleHandle_M1); // Initial position PID 
+  Abs_Encoder_Init(&Abs_Encoder_M1);  // Initial absolute encoder sensor
+#if defined(ENCODER_SPI_MODE)
+  Abs_Encoder_M1.mode = SENSOR_SPI;
+#elif defined(ENCODER_PWM_MODE)  
+  Abs_Encoder_M1.mode = SENSOR_PWM;
+#endif
+  //---End add---//
 
   /********************************************************/
   /*   Bus voltage sensor component initialization        */
@@ -221,10 +233,10 @@ __weak void MCboot( MCI_Handle_t* pMCIList[NBR_OF_MOTORS],MCT_Handle_t* pMCTList
   MCT[M1].pPIDId = pPIDId[M1];
   MCT[M1].pPIDFluxWeakening = MC_NULL; /* if M1 doesn't has FW */
   MCT[M1].pPWMnCurrFdbk = pwmcHandle[M1];
-  MCT[M1].pRevupCtrl = &RevUpControlM1;              /* only if M1 is sensorless*/
-  MCT[M1].pSpeedSensorMain = (SpeednPosFdbk_Handle_t *) &STO_PLL_M1;
+  MCT[M1].pRevupCtrl = MC_NULL;//&RevUpControlM1;              /* only if M1 is sensorless*/
+  MCT[M1].pSpeedSensorMain = (SpeednPosFdbk_Handle_t *) &Abs_Encoder_M1;//STO_PLL_M1;
   MCT[M1].pSpeedSensorAux = MC_NULL;
-  MCT[M1].pSpeedSensorVirtual = &VirtualSpeedSensorM1;  /* only if M1 is sensorless*/
+  MCT[M1].pSpeedSensorVirtual = MC_NULL;//&VirtualSpeedSensorM1;  /* only if M1 is sensorless*/
   MCT[M1].pSpeednTorqueCtrl = pSTC[M1];
   MCT[M1].pStateMachine = &STM[M1];
   MCT[M1].pTemperatureSensor = (NTC_Handle_t *) pTemperatureSensor[M1];
@@ -336,8 +348,20 @@ __weak void TSK_MediumFrequencyTaskM1(void)
   State_t StateM1;
   int16_t wAux = 0;
 
-  bool IsSpeedReliable = STO_PLL_CalcAvrgMecSpeedUnit( &STO_PLL_M1, &wAux );
+  bool IsSpeedReliable ;//= STO_PLL_CalcAvrgMecSpeedUnit( &STO_PLL_M1, &wAux );
   PQD_CalcElMotorPower( pMPM[M1] );
+
+  //---Ken An add---//
+  /* Calculate average speed in 0.1Hz, Also read angle from abs encoder */
+#if defined(ABS_ENCODER_MODE) 
+  Abs_Encoder_CalcAvrgMecSpeed01Hz(&Abs_Encoder_M1, &wAux );
+  IsSpeedReliable = 1;
+#else
+  Abs_Encoder_CalcAvrgMecSpeed01Hz(&Abs_Encoder_M1, &wAux );
+  IsSpeedReliable = STO_PLL_CalcAvrgMecSpeed01Hz( &STO_PLL_M1, &wAux );
+#endif
+
+  //---End add---// 
 
   StateM1 = STM_GetState( &STM[M1] );
 
@@ -372,9 +396,18 @@ __weak void TSK_MediumFrequencyTaskM1(void)
 
   case CLEAR:
     /* In a sensorless configuration. Initiate the Revup procedure */
+    //---Ken An add---//
+#if defined(ABS_ENCODER_MODE) 
+    FOCVars[M1].bDriveInput = INTERNAL;
+    STC_SetSpeedSensor( pSTC[M1], &Abs_Encoder_M1._Super ); // Set sensor to abs encoder
+#else
     FOCVars[M1].bDriveInput = EXTERNAL;
     STC_SetSpeedSensor( pSTC[M1], &VirtualSpeedSensorM1._Super );
+    RUC_Clear( &RevUpControlM1, MCI_GetImposedMotorDirection( oMCInterface[M1] ) );
+
     STO_PLL_Clear( &STO_PLL_M1 );
+#endif
+//---End add---//
 
     if ( STM_NextState( &STM[M1], START ) == true )
     {
@@ -385,6 +418,10 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     break;
 
   case START:
+    //---Ken An add---//
+#if defined(ABS_ENCODER_MODE)
+    STM_NextState( &STM[M1], START_RUN );
+#else
     {
 
       /* Mechanical speed as imposed by the Virtual Speed Sensor during the Rev Up phase. */
@@ -430,7 +467,11 @@ __weak void TSK_MediumFrequencyTaskM1(void)
         STM_NextState( &STM[M1], SWITCH_OVER );
       }
     }
+#endif
+//---Add end---//
     break;
+
+#ifndef ABS_ENCODER_MODE
 
   case SWITCH_OVER:
     {
@@ -469,7 +510,19 @@ __weak void TSK_MediumFrequencyTaskM1(void)
 
     break;
 
+#endif
+
   case START_RUN:
+//---Ken an add---//
+#if defined(ABS_ENCODER_MODE)
+  
+    FOC_InitAdditionalMethods(M1);
+    FOC_CalcCurrRef( M1 );
+    STM_NextState( &STM[M1], RUN );
+    STC_ForceSpeedReferenceToCurrentSpeed( pSTC[M1] ); /* Init the reference speed to current speed */
+    MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor */
+  
+#else 
  /* only for sensor-less control */
     STC_SetSpeedSensor(pSTC[M1], &STO_PLL_M1._Super); /*Observer has converged*/
     {
@@ -482,21 +535,58 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     }
     STC_ForceSpeedReferenceToCurrentSpeed( pSTC[M1] ); /* Init the reference speed to current speed */
     MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor */
-
+#endif  
+//---Add end---// 
     break;
 
   case RUN:
     /* USER CODE BEGIN MediumFrequencyTask M1 2 */
+#if defined(POSITION_CONTROL)
+    //---Ken An add---//
+    /* Get error position/Angle, unit in rad*10000 */
+    Position_GetErrorAngle(&Abs_Encoder_M1,Target_Angle);
+  
+    /* If in speed control mode */
+    if(Position_M1.Mode_Flag == P_SPEED_MODE)
+    {
+      Position_M1.Set_Speed = Position_CalcSpeedReferrence();
+    }
 
+    /* Change mode to current mode */
+    if((Position_M1.Mode_Flag == P_TORQUE_MODE) && (Position_M1.Torque_First_Flag == 0))
+    {
+      qd_t temp_qd;
+      /* Get current Iqref value */
+      temp_qd = MC_GetIqdrefMotor1();
+      MC_ProgramTorqueRampMotor1(temp_qd.q,0);
+      Position_M1.Torque_First_Flag = 1;  
+      PID_SetIntegralTerm(&PIDAngleHandle_M1,0);
+    }
+  
+    Position_M1.Speed_ACC_Count++;
+    /* In speed control mode, calculate speed accelarate time, aslo excute speed ramp */
+    if((Position_M1.Speed_ACC_Count > SPEED_ACC_RATE) && (Position_M1.Mode_Flag == P_SPEED_MODE))
+    {
+      Position_M1.Speed_ACC_Count = 0;
+      Position_M1.Control_Speed = MC_GetLastRampFinalSpeedMotor1(); // Get setting speed value
+      Position_M1.Real_Speed = MC_GetMecSpeedAverageMotor1(); // Get average speed
+      Position_M1.Duration_ms = (uint16_t)(Abs_Value(Position_M1.Control_Speed - Position_M1.Real_Speed) * Position_M1.Speed_ACC_Gain / Position_M1.Speed_ACC_Div);
+      
+      MC_ProgramSpeedRampMotor1(Position_M1.Set_Speed/6,Position_M1.Duration_ms);
+    }
+#endif
+    //---End add---//
     /* USER CODE END MediumFrequencyTask M1 2 */
 
     MCI_ExecBufferedCommands( oMCInterface[M1] );
     FOC_CalcCurrRef( M1 );
 
+#ifndef ABS_ENCODER_MODE
     if( !IsSpeedReliable )
     {
       STM_FaultProcessing( &STM[M1], MC_SPEED_FDBK, 0 );
     }
+#endif
 
     /* USER CODE BEGIN MediumFrequencyTask M1 3 */
 
@@ -524,8 +614,10 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     break;
 
   case STOP_IDLE:
+#ifndef ABS_ENCODER_MODE
     STC_SetSpeedSensor( pSTC[M1],&VirtualSpeedSensorM1._Super );  	/*  sensor-less */
     VSS_Clear( &VirtualSpeedSensorM1 ); /* Reset measured speed in IDLE */
+#endif
 
     /* USER CODE BEGIN MediumFrequencyTask M1 5 */
 
@@ -609,12 +701,24 @@ __weak void FOC_CalcCurrRef(uint8_t bMotor)
   /* USER CODE BEGIN FOC_CalcCurrRef 0 */
 
   /* USER CODE END FOC_CalcCurrRef 0 */
+  //---Ken An add---//
   if(FOCVars[bMotor].bDriveInput == INTERNAL)
   {
-    FOCVars[bMotor].hTeref = STC_CalcTorqueReference(pSTC[bMotor]);
-    FOCVars[bMotor].Iqdref.q = FOCVars[bMotor].hTeref;
-
+  #if defined(POSITION_CONTROL)
+    /* If in position torque mode, Iqref come from Angle PID*/
+    if(Position_M1.Mode_Flag == P_TORQUE_MODE)
+    {
+      FOCVars[bMotor].hTeref = Position_CalcTorqueReferrence();   
+      FOCVars[bMotor].Iqdref.qI_Component1 = FOCVars[bMotor].hTeref;
+    }
+    else
+  #endif
+    {
+      FOCVars[bMotor].hTeref = STC_CalcTorqueReference(pSTC[bMotor]);
+      FOCVars[bMotor].Iqdref.qI_Component1 = FOCVars[bMotor].hTeref;
+    }
   }
+  //---End add---//
   /* USER CODE BEGIN FOC_CalcCurrRef 1 */
 
   /* USER CODE END FOC_CalcCurrRef 1 */
@@ -698,6 +802,12 @@ __weak uint8_t TSK_HighFrequencyTask(void)
   uint8_t bMotorNbr = 0;
   uint16_t hFOCreturn;
 
+  //---Ken An add---//
+  SPI_Encoder_EIAngle();
+  Abs_Encoder_M1._Super.hElAngle = SPI_EIAngle;
+  //---End add---// 
+ 
+#ifndef ABS_ENCODER_MODE
   uint16_t hState;  /*  only if sensorless main*/
   Observer_Inputs_t STO_Inputs; /*  only if sensorless main*/
 
@@ -709,6 +819,8 @@ __weak uint8_t TSK_HighFrequencyTask(void)
       FOCVars[M1].Iqdref.q = REMNG_Calc(pREMNG[M1]);
     }
   }
+#endif
+
   /* USER CODE BEGIN HighFrequencyTask SINGLEDRIVE_1 */
 
   /* USER CODE END HighFrequencyTask SINGLEDRIVE_1 */
@@ -722,6 +834,7 @@ __weak uint8_t TSK_HighFrequencyTask(void)
   }
   else
   {
+#ifndef ABS_ENCODER_MODE
     bool IsAccelerationStageReached = RUC_FirstAccelerationStageReached(&RevUpControlM1);
     STO_Inputs.Ialfa_beta = FOCVars[M1].Ialphabeta; /*  only if sensorless*/
     STO_Inputs.Vbus = VBS_GetAvBusVoltage_d(&(pBusSensorM1->_Super)); /*  only for sensorless*/
@@ -737,11 +850,33 @@ __weak uint8_t TSK_HighFrequencyTask(void)
       int16_t hObsAngle = SPD_GetElAngle(&STO_PLL_M1._Super);
       VSS_CalcElAngle(&VirtualSpeedSensorM1,&hObsAngle);
     }
+#endif
+
     /* USER CODE BEGIN HighFrequencyTask SINGLEDRIVE_3 */
 
     /* USER CODE END HighFrequencyTask SINGLEDRIVE_3 */
   }
   /* USER CODE BEGIN HighFrequencyTask 1 */
+
+#if 0
+  
+  //---Ken An add---//
+  /* DAC output*/
+  extern UI_Handle_t * pDAC;
+  static int16_t temp1;
+  static int16_t temp2;
+  
+//  temp1 = MC_GetLastRampFinalSpeedMotor1();
+//  temp2 = MC_GetMecSpeedAverageMotor1();
+  
+  temp1 = FOCVars[M1].hElAngle;
+  temp2 = Abs_Encoder_M1.Encoder_EIAngle; 
+  
+  DAC_SetUserChannelValue(pDAC, DAC_USER1, temp1);
+  DAC_SetUserChannelValue(pDAC, DAC_USER2, temp2);
+  //---End add---// 
+
+#endif  
 
   /* USER CODE END HighFrequencyTask 1 */
 

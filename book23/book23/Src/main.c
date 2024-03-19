@@ -49,7 +49,7 @@ DMA_HandleTypeDef hdma_tim1_up;
 DMA_HandleTypeDef hdma_tim1_ch4_trig_com;
 
 /* USER CODE BEGIN PV */
-
+#include "tle5012b.h"
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -103,11 +103,20 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
+
+  CalibTle5012b();
+
   MX_MotorControl_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
+
+  //HAL_GPIO_WritePin(VCC_ON_GPIO_Port,VCC_ON_Pin,GPIO_PIN_SET);  // 开驱动电源
+
+  MC_ProgramSpeedRampMotor1(200/6,200);
+  // MC_ProgramTorqueRampMotor1(100,200);
+  MC_StartMotor1();
 
   /* USER CODE END 2 */
 
@@ -355,7 +364,7 @@ static void MX_TIM1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM1_Init 2 */
-
+  TIM1->CCER=0x0555;
   /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
 
