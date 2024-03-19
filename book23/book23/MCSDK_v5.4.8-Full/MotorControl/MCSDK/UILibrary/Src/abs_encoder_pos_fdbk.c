@@ -28,10 +28,10 @@ Abs_Encoder_Handle_t Abs_Encoder_M1 =
 {																
   ._Super = {
     .bElToMecRatio                     =	POLE_PAIR_NUM,               
-    .hMaxReliableMecSpeed01Hz          =	(uint16_t)(1.15*MOTOR_MAX_SPEED_RPM/6),
-    .hMinReliableMecSpeed01Hz          =	(uint16_t)(MOTOR_MAX_SPEED_RPM/6),
+    .hMaxReliableMecSpeedUnit          =	(uint16_t)(1.15*MOTOR_MAX_SPEED_RPM/6),
+    .hMinReliableMecSpeedUnit          =	(uint16_t)(MOTOR_MAX_SPEED_RPM/6),
     .bMaximumSpeedErrorsNumber         =	MEAS_ERRORS_BEFORE_FAULTS,            
-    .hMaxReliableMecAccel01HzP         =	65535,                             
+    .hMaxReliableMecAccelUnitP         =	65535,
     .hMeasurementFrequency             =	TF_REGULATION_RATE,                 
   },
 	.mode = 0,
@@ -46,8 +46,8 @@ Abs_Encoder_Handle_t Abs_Encoder_M1 =
   */
 void Abs_Encoder_Init( Abs_Encoder_Handle_t * pHandle )
 {
-  uint16_t hMinReliableElSpeed01Hz = pHandle->_Super.hMinReliableMecSpeed01Hz * pHandle->_Super.bElToMecRatio;
-  uint16_t hMaxReliableElSpeed01Hz = pHandle->_Super.hMaxReliableMecSpeed01Hz * pHandle->_Super.bElToMecRatio;
+  uint16_t hMinReliableElSpeed01Hz = pHandle->_Super.hMinReliableMecSpeedUnit * pHandle->_Super.bElToMecRatio;
+  uint16_t hMaxReliableElSpeed01Hz = pHandle->_Super.hMaxReliableMecSpeedUnit * pHandle->_Super.bElToMecRatio;
 
   /* Adjustment factor: minimum measurable speed is x time less than the minimum reliable speed */
   hMinReliableElSpeed01Hz /= 4u;
@@ -67,7 +67,7 @@ void Abs_Encoder_Clear( Abs_Encoder_Handle_t * pHandle )
   pHandle->SensorIsReliable = true;
 
   /* Acceleration measurement not implemented.*/
-	pHandle->_Super.hMecAccel01HzP = 0;
+	pHandle->_Super.hMecAccelUnitP = 0;
 }
 
 /**
@@ -101,9 +101,9 @@ int16_t Abs_Encoder_GetMecAngle( Abs_Encoder_Handle_t * pHandle )
 */
 int16_t Abs_Encoder_GetAvrgMecSpeed01Hz( Abs_Encoder_Handle_t * pHandle )
 {	
-  pHandle->_Super.hAvrMecSpeed01Hz = pHandle->Encoder_Average_Speed_RPM / 6;
+  pHandle->_Super.hAvrMecSpeedUnit = pHandle->Encoder_Average_Speed_RPM / 6;
 
-  return pHandle->_Super.hAvrMecSpeed01Hz;
+  return pHandle->_Super.hAvrMecSpeedUnit;
 }
 
 /**
@@ -157,7 +157,7 @@ bool Abs_Encoder_CalcAvrgMecSpeed01Hz( Abs_Encoder_Handle_t * pHandle, int16_t *
 
 	
 	/* Calculate circle number */
-	// Circle_Calculate(pHandle);  // ¼ÆÈ¦¹¦ÄÜÔÚÉÏÃæÓÐÁËÕâÀï²»ÓÃ×öÁË
+	// Circle_Calculate(pHandle);  // ï¿½ï¿½È¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï²»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	/* Store angle in digital */
 	pHandle->Encoder_AngleD_Pre = pHandle->Encoder_AngleD_Now;
@@ -170,8 +170,8 @@ bool Abs_Encoder_CalcAvrgMecSpeed01Hz( Abs_Encoder_Handle_t * pHandle, int16_t *
 	/* Store EI angle, Mec angle, average speed*/
 	pHandle->_Super.hElAngle = pHandle->Encoder_EIAngle;
 	pHandle->_Super.hMecAngle = pHandle->Encoder_MecAngle;
-	pHandle->_Super.hAvrMecSpeed01Hz = pHandle->Encoder_Average_Speed_RPM /6;
-	*hMecSpeed01Hz = pHandle->_Super.hAvrMecSpeed01Hz;
+	pHandle->_Super.hAvrMecSpeedUnit = pHandle->Encoder_Average_Speed_RPM /6;
+	*hMecSpeed01Hz = pHandle->_Super.hAvrMecSpeedUnit;
 	
 	/* Judge if speed is reliable */
 	bReliability = SPD_IsMecSpeedReliable( &pHandle->_Super, hMecSpeed01Hz );

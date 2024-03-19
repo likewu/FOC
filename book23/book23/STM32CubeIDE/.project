@@ -71,6 +71,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Src/mc_parameters.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/mc_position.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Src/mc_position.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/mc_tasks.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Src/mc_tasks.c</locationURI>
@@ -104,11 +109,6 @@
 			<name>Application/User/stm32f1xx_it.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Src/stm32f1xx_it.c</locationURI>
-		</link>
-		<link>
-			<name>Application/User/system_stm32f1xx.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Src/system_stm32f1xx.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/tle5012b.c</name>
@@ -206,6 +206,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/MotorControl/abs_encoder_pos_fdbk.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MCSDK_v5.4.8-Full/MotorControl/MCSDK/UILibrary/Src/abs_encoder_pos_fdbk.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/MotorControl/bus_voltage_sensor.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/MCSDK_v5.4.8-Full/MotorControl/MCSDK/MCLib/Any/Src/bus_voltage_sensor.c</locationURI>
@@ -289,6 +294,11 @@
 			<name>Middlewares/MotorControl/speed_torq_ctrl.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/MCSDK_v5.4.8-Full/MotorControl/MCSDK/MCLib/Any/Src/speed_torq_ctrl.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/MotorControl/spi_pwm_encoder.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/MCSDK_v5.4.8-Full/MotorControl/MCSDK/UILibrary/Src/spi_pwm_encoder.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/MotorControl/state_machine.c</name>
