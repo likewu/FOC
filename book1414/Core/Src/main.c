@@ -52,7 +52,6 @@ UART_HandleTypeDef huart2;
 #define KEY_NOT_PRESSED 0x01
 
 uint8_t ubKeyNumber = 0x0;
-CAN_HandleTypeDef     CanHandle;
 CAN_TxHeaderTypeDef   TxHeader;
 CAN_RxHeaderTypeDef   RxHeader;
 uint8_t               TxData[8];
@@ -160,11 +159,11 @@ int main(void)
         HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
         
         /* Set the data to be transmitted */
-        //TxData[0] = ubKeyNumber;
+        TxData[0] = 99;//ubKeyNumber;
         //TxData[1] = 0xAD;
         
         /* Start the Transmission process */
-        /*if (HAL_CAN_AddTxMessage(&CanHandle, &TxHeader, TxData, &TxMailbox) != HAL_OK)
+        if (HAL_CAN_AddTxMessage(&hcan, &TxHeader, TxData, &TxMailbox) != HAL_OK)
         {
           Error_Handler();
         }
@@ -172,7 +171,7 @@ int main(void)
         
         while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != KEY_NOT_PRESSED)
         {
-        }*/
+        }
       }
     }
   }
@@ -248,14 +247,14 @@ static void MX_CAN_Init(void)
   }
   /* USER CODE BEGIN CAN_Init 2 */
   /* Start the CAN peripheral */
-  if (HAL_CAN_Start(&CanHandle) != HAL_OK)
+  if (HAL_CAN_Start(&hcan) != HAL_OK)
   {
     /* Start Error */
     Error_Handler();
   }
 
   /* Activate CAN RX notification */
-  if (HAL_CAN_ActivateNotification(&CanHandle, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  if (HAL_CAN_ActivateNotification(&hcan, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
   {
     /* Notification Error */
     Error_Handler();
@@ -269,7 +268,31 @@ static void MX_CAN_Init(void)
   TxHeader.DLC = 2;
   TxHeader.TransmitGlobalTime = DISABLE;
   /* USER CODE END CAN_Init 2 */
+}
 
+/**
+  * @brief  Rx Fifo 0 message pending callback in non blocking mode
+  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
+  *         the configuration information for the specified CAN.
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
+{
+  /* Get RX message */
+  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  {
+    /* Reception Error */
+    Error_Handler();
+  }
+
+  /* Display LEDx */
+  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
+    HAL_Delay(15);
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+    ubKeyNumber = RxData[0];
+  }
 }
 
 /**
@@ -303,31 +326,6 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 2 */
 
-}
-
-/**
-  * @brief  Rx Fifo 0 message pending callback in non blocking mode
-  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
-  *         the configuration information for the specified CAN.
-  * @retval None
-  */
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
-{
-  /* Get RX message */
-  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
-  {
-    /* Reception Error */
-    Error_Handler();
-  }
-
-  /* Display LEDx */
-  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
-  {
-    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
-    HAL_Delay(15);
-    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
-    ubKeyNumber = RxData[0];
-  }
 }
 
 /**
