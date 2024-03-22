@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include "bldc.h"
 #include "pid.h"
 #include "visualscope.h"
@@ -169,6 +170,7 @@ int main(void)
         {
           Error_Handler();
         }
+        printf("11111111111111111");
         HAL_Delay(10);
         
         while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != KEY_NOT_PRESSED)
@@ -584,6 +586,13 @@ uint16_t getCurrent( void )
   return max;
 
 #endif
+}
+
+// 重定向 fputc 函数，将输出重定向到 USART1
+int fputc(int ch, FILE *f) {
+    HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+
+    return ch;
 }
 /* USER CODE END 4 */
 
