@@ -234,7 +234,7 @@ static void MX_CAN_Init(void)
 
   /* USER CODE END CAN_Init 1 */
   hcan.Instance = CAN1;
-  hcan.Init.Prescaler = 60;
+  hcan.Init.Prescaler = 480;  //波特率为：72M/(480*(1+3+2))=0.25 即250K
   hcan.Init.Mode = CAN_MODE_LOOPBACK;//CAN_MODE_NORMAL;
   hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;
   hcan.Init.TimeSeg1 = CAN_BS1_3TQ;
@@ -313,7 +313,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
   if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
   {
     HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
-    HAL_Delay(15);
+    //HAL_Delay(15);
+    for(int i=0;i<3127*100;i++);
     HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
     //ubKeyNumber = RxData[0];
   }
