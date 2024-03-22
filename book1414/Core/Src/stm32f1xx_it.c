@@ -55,6 +55,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern CAN_HandleTypeDef hcan;
 extern TIM_HandleTypeDef htim8;
 /* USER CODE BEGIN EV */
 
@@ -199,6 +200,20 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles USB low priority or CAN RX0 interrupts.
+  */
+void USB_LP_CAN1_RX0_IRQHandler(void)
+{
+  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
+
+  /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
+  HAL_CAN_IRQHandler(&hcan);
+  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
+
+  /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM8 update interrupt.
   */
 void TIM8_UP_IRQHandler(void)
@@ -215,15 +230,15 @@ void TIM8_UP_IRQHandler(void)
   {
       __HAL_TIM_CLEAR_IT( &htim8, TIM_IT_UPDATE);
 
-      // æ¯10ms æ‰§è¡Œä¸€æ¬¡é€Ÿåº¦é—­çŽ¯æŽ§åˆ¶,è¿™é‡Œæ¼”ç¤ºçš„æ˜¯ç›´æŽ¥é€Ÿåº¦çŽ¯ï¼Œè¿˜å¯ä»¥é€Ÿåº¦çŽ¯å†…åµŒç”µæµçŽ¯æ–¹å¼å®žçŽ°ï¼Œ
-      // ä¸€æ ·å¯ä»¥å®žçŽ°é€Ÿåº¦é—­çŽ¯æŽ§åˆ¶
+      // Ã¿10ms Ö´ÐÐÒ»´ÎËÙ¶È±Õ»·¿ØÖÆ,ÕâÀïÑÝÊ¾µÄÊÇÖ±½ÓËÙ¶È»·£¬»¹¿ÉÒÔËÙ¶È»·ÄÚÇ¶µçÁ÷»··½Ê½ÊµÏÖ£¬
+      // Ò»Ñù¿ÉÒÔÊµÏÖËÙ¶È±Õ»·¿ØÖÆ
       if( ++cnt == 10 )
       {
         cnt = 0;
 
         PidSpeed.Ref = (ADC2->DR>>2)/512.0f - 1.0f;
         mymotor.SpeedRef = PidSpeed.Ref*12000.0f;
-        PidSpeed.Fbk = mymotor.SpeedBck/12000.0f;  // é€Ÿåº¦0-12000 å½’ä¸€åŒ–åˆ° 0 - 1
+        PidSpeed.Fbk = mymotor.SpeedBck/12000.0f;  // ËÙ¶È0-12000 ¹éÒ»»¯µ½ 0 - 1
         updatePID(&PidSpeed);
         BldcUpdataPwm( PidSpeed.Out*1199 );
       }
