@@ -170,7 +170,7 @@ int main(void)
         {
           Error_Handler();
         }
-        printf("11111111111111111");
+        printf("11111111111111111\r\n");
         HAL_Delay(10);
         
         while (HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin) != KEY_NOT_PRESSED)
@@ -589,10 +589,17 @@ uint16_t getCurrent( void )
 }
 
 // 重定向 fputc 函数，将输出重定向到 USART1
-int fputc(int ch, FILE *f) {
+int fputc(int ch, FILE *f) {  //MDK
     HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
 
     return ch;
+}
+__attribute__((weak)) int _write(int file, char *ptr, int len)  //gcc
+{
+   if(HAL_UART_Transmit(&huart1,ptr,len,0xffff) != HAL_OK)
+   {
+     Error_Handler();
+   }
 }
 /* USER CODE END 4 */
 
