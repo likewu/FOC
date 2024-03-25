@@ -25,6 +25,10 @@
 #include "bldc.h"
 #include "pid.h"
 #include "visualscope.h"
+
+#include "usb_host.h"
+
+#include "lin_protocol.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,6 +69,39 @@ uint32_t              TxMailbox;
 
 uint16_t adcTemp[64];
 uint16_t getCurrent( void );
+
+uint32_t counter = 1;
+uint32_t counter_2 = 1;
+uint8_t array[100] = {0};
+uint32_t alive_sw = 1;
+
+uint64_t counter_timer = 0;
+uint32_t read_pin_counter = 0;
+
+const uint8_t rx_size = 20;
+uint8_t rx_buff[20] = {0};
+uint8_t tx_buff[4] = {0, 1, 2, 3};
+
+uint8_t raw_data[40] = {};
+uint8_t raw_index = 0;
+//extern uint8_t flag_read_pin;
+uint8_t flag_read_pin = 0;
+
+LIN_ERR_t check;
+
+//for dertermine LOGIC level
+uint8_t logic_counter = 0;
+uint8_t sample_counter = 0; //max = 13
+uint8_t dertimine_logic = 0; //max = 13
+
+uint8_t bit_index = 0; //max = 20
+uint8_t bit_array[20] = {0};
+
+uint8_t tx_data = 0;
+uint8_t rx_data = 0;
+
+LIN_FRAME_t myFrame;
+uint8_t uart3_rx_data = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,6 +152,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  //MX_USB_HOST_Init();
   MX_TIM8_Init();
   MX_CAN_Init();
   MX_USART2_UART_Init();
@@ -124,6 +162,9 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   printf("App Started\r\n");
+  HAL_TIM_Base_Start_IT(&htim3);
+  HAL_UART_Receive_IT (&huart4, rx_buff, 20);
+  HAL_UART_Receive_IT (&huart3, &uart3_rx_data, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -155,7 +196,7 @@ int main(void)
     if( mymotor.SpeedBck > 32000 ) speed = 32000;
     else if( mymotor.SpeedBck < -32000 ) speed = -32000;
     else speed = mymotor.SpeedBck;
-    *(uint16_t *)(tx+4) = speed;  //  ï¿½ï¿½ï¿½×ªï¿½ï¿? ï¿½ï¿½×ª/ï¿½ï¿½
+    *(uint16_t *)(tx+4) = speed;  //  ï¿½ï¿½ï¿½×ªï¿½ï¿½? ï¿½ï¿½×ª/ï¿½ï¿½
     CRC16( tx, tx+8, 8 );
     HAL_UART_Transmit(&huart2,tx,10,10);
     HAL_Delay(2);
@@ -169,6 +210,19 @@ int main(void)
       else
       {
         HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+
+        //MX_USB_HOST_Process();
+
+        if (tx_data == 10) {
+          UB_LIN_SendData(&myFrame, &huart2);
+          HAL_Delay(100);
+          tx_data = 20;
+        } else if ( tx_data == 20) {
+          //UB_LIN_SendData(&myFrame, &huart2);
+          //HAL_Delay(100);
+        } else {
+          //do nothing
+        }
         
         /* Set the data to be transmitted */
         TxData[0] = 98;//ubKeyNumber;
@@ -200,6 +254,8 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -210,6 +266,10 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL4;
+  //RCC_OscInitStruct.PLL.PLLM = 4;
+  //RCC_OscInitStruct.PLL.PLLN = 168;
+  //RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  //RCC_OscInitStruct.PLL.PLLQ = 7;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -246,7 +306,7 @@ static void MX_CAN_Init(void)
 
   /* USER CODE END CAN_Init 1 */
   hcan.Instance = CAN1;
-  hcan.Init.Prescaler = 480;  //²¨ÌØÂÊÎª£º72M/(480*(1+3+2))=0.25 ¼´250K
+  hcan.Init.Prescaler = 480;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½72M/(480*(1+3+2))=0.25 ï¿½ï¿½250K
   hcan.Init.Mode = CAN_MODE_LOOPBACK;//CAN_MODE_NORMAL;
   hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;
   hcan.Init.TimeSeg1 = CAN_BS1_3TQ;
@@ -303,33 +363,6 @@ static void MX_CAN_Init(void)
   TxHeader.TransmitGlobalTime = DISABLE;
   /* USER CODE END CAN_Init 2 */
 
-}
-
-/**
-  * @brief  Rx Fifo 0 message pending callback in non blocking mode
-  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
-  *         the configuration information for the specified CAN.
-  * @retval None
-  */
-void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
-{
-  /* Get RX message */
-  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
-  {
-    /* Reception Error */
-    Error_Handler();
-  }
-
-  printf("Msg received - Data = %d\r\n", RxData[0]);
-  /* Display LEDx */
-  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
-  {
-    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
-    //HAL_Delay(15);
-    for(int i=0;i<3127*100;i++);
-    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
-    //ubKeyNumber = RxData[0];
-  }
 }
 
 /**
@@ -687,6 +720,140 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  Rx Fifo 0 message pending callback in non blocking mode
+  * @param  CanHandle: pointer to a CAN_HandleTypeDef structure that contains
+  *         the configuration information for the specified CAN.
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
+{
+  /* Get RX message */
+  if (HAL_CAN_GetRxMessage(CanHandle, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+  {
+    /* Reception Error */
+    Error_Handler();
+  }
+
+  printf("Msg received - Data = %d\r\n", RxData[0]);
+  /* Display LEDx */
+  if ((RxHeader.StdId == 0x321) && (RxHeader.IDE == CAN_ID_STD) && (RxHeader.DLC == 2))
+  {
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_SET);
+    //HAL_Delay(15);
+    for(int i=0;i<3127*100;i++);
+    HAL_GPIO_WritePin(LD2_GPIO_Port,LD2_Pin,GPIO_PIN_RESET);
+    //ubKeyNumber = RxData[0];
+  }
+}
+
+// Callback: timer has rolled over
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  // Check which version of the timer triggered this callback and toggle LED
+//  if (htim == &htim14)
+//  {
+//    if(counter_timer >= 100000) {
+//      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+//      counter_timer = 0;
+//    }
+//    else {
+//      counter_timer++;
+//    }
+//
+////    if (flag_read_pin == 0) { //one time only
+////      if (HAL_GPIO_ReadPin (GPIOD, GPIO_PIN_11) == 0) {
+////        flag_read_pin = 1;
+////      }
+////    }
+//
+//    if (flag_read_pin == 1) {
+////      if (raw_index < 38) {
+////        raw_data[raw_index] = HAL_GPIO_ReadPin (GPIOD, GPIO_PIN_11);
+////        raw_index ++;
+////      }
+////      read_pin_counter = 0;
+//      if (read_pin_counter >= 52) {
+//        if (raw_index < 38) {
+//          raw_data[raw_index] = HAL_GPIO_ReadPin (GPIOD, GPIO_PIN_11);
+//          raw_index ++;
+//        }
+//        read_pin_counter = 0;
+//      } else {
+//        read_pin_counter++;
+//      }
+//
+//
+//      if(HAL_GPIO_ReadPin (GPIOD, GPIO_PIN_11) == GPIO_PIN_RESET) { //start trigger dertermine LOGIC
+//        if (logic_counter == 4) {
+//          sample_counter++; //max = 13
+//          logic_counter = 0; //max = 4 ->reset
+//          // check logic
+//          if(HAL_GPIO_ReadPin (GPIOD, GPIO_PIN_11) == GPIO_PIN_RESET) {
+//            dertimine_logic++; //adding 1 each time sampling
+//          } else {
+//            //do nothing
+//          }
+//          if (dertimine_logic > LOGIC_CONFIRMED) {
+//            bit_array[bit_index] = 0;
+//          } else {
+//            bit_array[bit_index] = 1;
+//          }
+//          // end check logic
+//        }
+//        logic_counter++;
+//      } else {
+//        //do nothing
+//      }
+//
+//    }
+//  }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  counter_2++;
+  if (counter_2 >= 1000) counter_2 = 0;
+  if(huart->Instance == huart4.Instance) {
+    HAL_UART_Receive_IT(&huart4, rx_buff, 10); //You need to toggle a breakpoint on this line!
+    uint8_t feedback_data = 10;
+    HAL_UART_Transmit(&huart4, &feedback_data, 1, 100);
+  }
+  if(huart->Instance == huart3.Instance) {
+    HAL_UART_Receive_IT(&huart3, &uart3_rx_data, 1);
+  }
+
+}
+
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+ if (GPIO_Pin == GPIO_PIN_3) //key 1
+ {
+   tx_data = 10;
+//   HAL_UART_Transmit(&huart2, &tx_data, 1, 100);
+   myFrame.frame_id=0x01;
+   myFrame.data_len=2;
+   myFrame.data[0]=0xA1;
+   myFrame.data[1]=0xB2;
+//   UB_LIN_SendData(&myFrame, &huart2);
+//   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1);
+//   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1);
+ }
+ else if (GPIO_Pin == GPIO_PIN_4) //key 0
+ {
+   tx_data = 10;
+   myFrame.frame_id=0x05;
+   myFrame.data_len=2;
+   myFrame.data[0]=0x01;
+   myFrame.data[1]=0x02;
+//   UB_LIN_SendData(&myFrame, &huart2);
+//   HAL_UART_Transmit(&huart2, &tx_data, 1, 100);
+//   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 0);
+//   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 0);
+ }
+}
+
 uint16_t getCurrent( void )
 {
   uint8_t i,j=0;
@@ -715,7 +882,7 @@ uint16_t getCurrent( void )
 #endif
 }
 
-// ÖØ¶¨Ïò fputc º¯Êı£¬½«Êä³öÖØ¶¨Ïòµ½ USART1
+// é‡å®šå‘ fputc å‡½æ•°ï¼Œå°†è¾“å‡ºé‡å®šå‘åˆ° USART1
 int fputc(int ch, FILE *f) {  //MDK
     HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
 
