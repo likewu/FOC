@@ -26,7 +26,7 @@
 #include "pid.h"
 #include "visualscope.h"
 
-#include "usb_host.h"
+//#include "usb_host.h"
 
 #include "lin_protocol.h"
 /* USER CODE END Includes */
@@ -254,7 +254,7 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  //__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
