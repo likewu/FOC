@@ -214,11 +214,11 @@ int main(void)
         //MX_USB_HOST_Process();
 
         if (tx_data == 10) {
-          UB_LIN_SendData(&myFrame, &huart2);
+          UB_LIN_SendData(&myFrame, &huart3);
           HAL_Delay(100);
           tx_data = 20;
         } else if ( tx_data == 20) {
-          //UB_LIN_SendData(&myFrame, &huart2);
+          //UB_LIN_SendData(&myFrame, &huart3);
           //HAL_Delay(100);
         } else {
           //do nothing
@@ -567,7 +567,7 @@ static void MX_UART4_Init(void)
   huart4.Init.Mode = UART_MODE_TX_RX;
   huart4.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart4.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart4) != HAL_OK)
+  if (HAL_LIN_Init(&huart4, UART_LINBREAKDETECTLENGTH_11B) != HAL_OK)
   {
     Error_Handler();
   }
@@ -666,7 +666,7 @@ static void MX_USART3_UART_Init(void)
   huart3.Init.Mode = UART_MODE_TX_RX;
   huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
+  if (HAL_LIN_Init(&huart3, UART_LINBREAKDETECTLENGTH_11B) != HAL_OK)
   {
     Error_Handler();
   }
@@ -751,7 +751,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *CanHandle)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   // Check which version of the timer triggered this callback and toggle LED
-//  if (htim == &htim14)
+//  if (htim == &htim3)
 //  {
 //    if(counter_timer >= 100000) {
 //      HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
@@ -831,12 +831,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
  if (GPIO_Pin == GPIO_PIN_3) //key 1
  {
    tx_data = 10;
-//   HAL_UART_Transmit(&huart2, &tx_data, 1, 100);
+//   HAL_UART_Transmit(&huart3, &tx_data, 1, 100);
    myFrame.frame_id=0x01;
    myFrame.data_len=2;
    myFrame.data[0]=0xA1;
    myFrame.data[1]=0xB2;
-//   UB_LIN_SendData(&myFrame, &huart2);
+//   UB_LIN_SendData(&myFrame, &huart3);
 //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1);
 //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1);
  }
@@ -847,8 +847,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
    myFrame.data_len=2;
    myFrame.data[0]=0x01;
    myFrame.data[1]=0x02;
-//   UB_LIN_SendData(&myFrame, &huart2);
-//   HAL_UART_Transmit(&huart2, &tx_data, 1, 100);
+//   UB_LIN_SendData(&myFrame, &huart3);
+//   HAL_UART_Transmit(&huart3, &tx_data, 1, 100);
 //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 0);
 //   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 0);
  }
