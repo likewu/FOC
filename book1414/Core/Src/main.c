@@ -196,7 +196,7 @@ int main(void)
     if( mymotor.SpeedBck > 32000 ) speed = 32000;
     else if( mymotor.SpeedBck < -32000 ) speed = -32000;
     else speed = mymotor.SpeedBck;
-    *(uint16_t *)(tx+4) = speed;  //  ���ת��? ��ת/��
+    *(uint16_t *)(tx+4) = speed;  //  锟斤拷锟阶拷锟?? 锟斤拷转/锟斤拷
     CRC16( tx, tx+8, 8 );
     HAL_UART_Transmit(&huart2,tx,10,10);
     HAL_Delay(2);
