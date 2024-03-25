@@ -16,60 +16,14 @@
 //#include "stm32f4xx_rcc.h"
 //#include "stm32f4xx_usart.h"
 //#include "misc.h"
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_conf.h"
+#include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_conf.h"
 #include "main.h"
 
 extern uint8_t btn;
 extern uint8_t checker_1;
 extern uint8_t checker_2;
 extern uint8_t checker_3;
-
-//--------------------------------------------------------------
-// GPIO : UART-TX (PA2)
-//--------------------------------------------------------------
-#define  LIN_TX_CLOCK    RCC_AHB1Periph_GPIOA
-#define  LIN_TX_PIN      GPIO_Pin_2
-#define  LIN_TX_SOURCE   GPIO_PinSource2
-#define  LIN_TX_PORT     GPIOA
-
-
-//--------------------------------------------------------------
-// GPIO : UART-RX (PA3)
-//--------------------------------------------------------------
-#define  LIN_RX_CLOCK    RCC_AHB1Periph_GPIOA
-#define  LIN_RX_PIN      GPIO_Pin_3
-#define  LIN_RX_SOURCE   GPIO_PinSource3
-#define  LIN_RX_PORT     GPIOA
-
-
-//--------------------------------------------------------------
-// UART : (UART-2)
-//--------------------------------------------------------------
-#define  LIN_UART        USART2
-#define  LIN_UART_CLOCK  RCC_APB1Periph_USART2
-#define  LIN_UART_AF     GPIO_AF_USART2
-#define  LIN_UART_IRQ    USART2_IRQn
-#define  LIN_UART_ISR    USART2_IRQHandler
-
-
-//--------------------------------------------------------------
-// GPIO : NSLP pin from the transceiver (PA1)
-//--------------------------------------------------------------
-#define  LIN_NSLP_CLOCK    RCC_AHB1Periph_GPIOA
-#define  LIN_NSLP_PIN      GPIO_Pin_1
-#define  LIN_NSLP_PORT     GPIOA
-
-
-
-//--------------------------------------------------------------
-// baud rate (max 20 kBaud)
-//
-// @ 9600 Baud: Field Time (10bit) = about 1ms
-//--------------------------------------------------------------
-#define  LIN_UART_BAUD   9600
-
-
 
 //--------------------------------------------------------------
 // Global Defines
