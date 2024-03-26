@@ -2,11 +2,12 @@
 #include "stdio.h"
 #include "Lin_buffer.h"
 #include "lin_driver.h"
- 
+
+extern UART_HandleTypeDef huart3;
  
 LIN_RxState       LIN_RxStateGet = BREAK_GET; 
 LIN_ERROR_Code    ErrCode = FIFO_VOID;
-uint8_t                data[8] = {0x11,0x01,0x34,0x34,0x56,0x34,0x78,0x67};
+uint8_t           data[8] = {0x11,0x01,0x34,0x34,0x56,0x34,0x78,0x67};
  
  
 //LIN接收缓冲区
@@ -28,19 +29,19 @@ void LIN_MASTER_IRQHandler(void)
   uint8_t ReceiveData = 0;
   
   //LIN断开帧中断
-  if ((USART_GetITStatus(USART1,UART_IT_LBD) == SET)){   //LIN断路检测中断  1 -- 有同步间隔段
+  if ((__HAL_UART_GET_IT_SOURCE(&huart3, UART_IT_LBD) == SET)){   //LIN断路检测中断  1 -- 有同步间隔段
     LIN_RingBUF_ClearRxMsg(&LIN_RxDataBuff);              //清空当前缓冲区
     USART1->SR;     //读取USART1->SR会导致接收缓冲区中的数据被移除或清空
     USART1->DR; 
     LIN_RxStateGet = SYNCH_GET;
-    USART_ClearITPendingBit(USART1,UART_IT_LBD);         //清除LIN断路检测中断
-    USART_ClearITPendingBit(USART1,UART_IT_RXNE);
+    __HAL_UART_DISABLE_IT(&huart3, UART_IT_LBD);         //清除LIN断路检测中断
+    __HAL_UART_DISABLE_IT(&huart3, UART_IT_RXNE);
     return;   
   }
   
-  if (USART_GetITStatus(USART1,UART_IT_RXNE) == SET){            //LIN接收中断
-    ReceiveData = USART_ReceiveData(USART1);                      //返回USARTx外设最近接收到的数据。
-    if (USART_GetFlagStatus(USART1,UART_FLAG_FE) == RESET){      //帧错误标志  0 -- 没有检测到帧错误
+  if (__HAL_UART_GET_IT_SOURCE(&huart3, UART_IT_RXNE) == SET){            //LIN接收中断
+    HAL_UART_Receive(&huart3, &ReceiveData, 1, 100);                      //返回USARTx外设最近接收到的数据。
+    if (__HAL_UART_GET_FLAG(&huart3, UART_FLAG_FE) == RESET){      //帧错误标志  0 -- 没有检测到帧错误
       if ((ReceiveData==0x55)&&(LIN_RxStateGet==BREAK_GET)){      //处理无同步间隔信号的LIN数据                                    //初始化定时器值 类似喂狗
         LIN_RingBUF_ClearRxMsg(&LIN_RxDataBuff);                  //清空当前缓冲区
         USART1->SR;     
@@ -50,7 +51,7 @@ void LIN_MASTER_IRQHandler(void)
       }
         LIN_MasterRxMsg(ReceiveData);   //消息处理
     }
-    USART_ClearITPendingBit(USART1,UART_IT_RXNE);
+    __HAL_UART_DISABLE_IT(&huart3, UART_IT_RXNE);
   }
 }
  
@@ -161,7 +162,7 @@ void LIN_Rx_data(uint8_t PID, uint8_t* pData,uint8_t DataLen)
   */
 void LIN_SendBreak(USART_TypeDef* USARTx)
 {
-  USART_SendBreak(USARTx);
+  HAL_LIN_SendBreak(&huart3);
 }
  
  
@@ -173,10 +174,10 @@ void LIN_SendBreak(USART_TypeDef* USARTx)
 void LIN_SendBytes(USART_TypeDef* USARTx,uint8_t* pData,uint8_t DataLen)
 {
   for (uint8_t i = 0; i < DataLen; i++){
-    USART_SendData(USARTx,*pData++);
-    while (USART_GetFlagStatus(USARTx,UART_FLAG_TXE) == RESET);  //传输数据寄存器空标志
+    HAL_UART_Transmit(&huart3, *pData++, 1, 100);
+    while (__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TXE) == RESET);  //传输数据寄存器空标志
   }
-  while (USART_GetFlagStatus(USARTx,UART_FLAG_TC) == RESET);   //传输完成标志
+  while (__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC) == RESET);   //传输完成标志
 }
  
  
