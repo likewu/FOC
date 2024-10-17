@@ -220,7 +220,7 @@ __weak void MCboot( MCI_Handle_t* pMCIList[NBR_OF_MOTORS],MCT_Handle_t* pMCTList
   REMNG_Init(pREMNG[M1]);
 
   FOC_Clear(M1);
-  FOCVars[M1].bDriveInput = EXTERNAL;
+  FOCVars[M1].bDriveInput = EXTERNAL;  //设置影响FOC_CalcCurrRef，使用INTERNAL是内部根据速度等计算获得，使用EXTERNAL
   FOCVars[M1].Iqdref = STC_GetDefaultIqdref(pSTC[M1]);
   FOCVars[M1].UserIdref = STC_GetDefaultIqdref(pSTC[M1]).d;
   oMCInterface[M1] = & Mci[M1];
@@ -349,7 +349,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
   int16_t wAux = 0;
 
   bool IsSpeedReliable ;//= STO_PLL_CalcAvrgMecSpeedUnit( &STO_PLL_M1, &wAux );
-  PQD_CalcElMotorPower( pMPM[M1] );
+  PQD_CalcElMotorPower( pMPM[M1] );  //检测速度是不是可靠，如果不可靠后续运行时需要错误处理
 
   //---Ken An add---//
   /* Calculate average speed in 0.1Hz, Also read angle from abs encoder */
@@ -368,16 +368,16 @@ __weak void TSK_MediumFrequencyTaskM1(void)
   switch ( StateM1 )
   {
   case IDLE_START:
-    RUC_Clear( &RevUpControlM1, MCI_GetImposedMotorDirection( oMCInterface[M1] ) );
+    RUC_Clear( &RevUpControlM1, MCI_GetImposedMotorDirection( oMCInterface[M1] ) );  //初始化内部转速控制器状态
     R1VL1_TurnOnLowSides( pwmcHandle[M1] );
-    TSK_SetChargeBootCapDelayM1( CHARGE_BOOT_CAP_TICKS );
+    TSK_SetChargeBootCapDelayM1( CHARGE_BOOT_CAP_TICKS );  //记录电容充电开始时间
     STM_NextState( &STM[M1], CHARGE_BOOT_CAP );
     break;
 
   case CHARGE_BOOT_CAP:
-    if ( TSK_ChargeBootCapDelayHasElapsedM1() )
+    if ( TSK_ChargeBootCapDelayHasElapsedM1() )  //如果有开机电容需要判断到充电完成时间够再运行
     {
-      PWMC_CurrentReadingCalibr( pwmcHandle[M1], CRC_START );
+      PWMC_CurrentReadingCalibr( pwmcHandle[M1], CRC_START );  //通过读取没有电流时的电流值电压值作为校准，每次启动都需要调用。
 
       /* USER CODE BEGIN MediumFrequencyTask M1 Charge BootCap elapsed */
 
@@ -398,14 +398,14 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     /* In a sensorless configuration. Initiate the Revup procedure */
     //---Ken An add---//
 #if defined(ABS_ENCODER_MODE) 
-    FOCVars[M1].bDriveInput = INTERNAL;
+    FOCVars[M1].bDriveInput = INTERNAL;  //设置影响FOC_CalcCurrRef，使用INTERNAL是内部根据速度等计算获得，使用EXTERNAL
     STC_SetSpeedSensor( pSTC[M1], &Abs_Encoder_M1._Super ); // Set sensor to abs encoder
 #else
-    FOCVars[M1].bDriveInput = EXTERNAL;
-    STC_SetSpeedSensor( pSTC[M1], &VirtualSpeedSensorM1._Super );
+    FOCVars[M1].bDriveInput = EXTERNAL;  //设置影响FOC_CalcCurrRef，使用INTERNAL是内部根据速度等计算获得，使用EXTERNAL
+    STC_SetSpeedSensor( pSTC[M1], &VirtualSpeedSensorM1._Super );  //设置速度传感器为虚拟传感器
     RUC_Clear( &RevUpControlM1, MCI_GetImposedMotorDirection( oMCInterface[M1] ) );
 
-    STO_PLL_Clear( &STO_PLL_M1 );
+    STO_PLL_Clear( &STO_PLL_M1 );  //STO滑模观测的状态清0，后续到一定速度后会启动检测
 #endif
 //---End add---//
 
@@ -430,7 +430,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
       bool ObserverConverged = false;
 
       /* Execute the Rev Up procedure */
-      if( ! RUC_Exec( &RevUpControlM1 ) )
+      if( ! RUC_Exec( &RevUpControlM1 ) )  //进行加速过程，加速可以由多个步骤的加速设置组合而成
       {
         /* The time allowed for the startup sequence has expired */
         STM_FaultProcessing( &STM[M1], MC_START_UP, 0 );
@@ -439,27 +439,29 @@ __weak void TSK_MediumFrequencyTaskM1(void)
       {
         /* Execute the torque open loop current start-up ramp:
          * Compute the Iq reference current as configured in the Rev Up sequence */
-        IqdRef.q = STC_CalcTorqueReference( pSTC[M1] );
-        IqdRef.d = FOCVars[M1].UserIdref;
+        IqdRef.q = STC_CalcTorqueReference( pSTC[M1] );  //计算Iq值
+        IqdRef.d = FOCVars[M1].UserIdref;  //Id使用用户设定值
         /* Iqd reference current used by the High Frequency Loop to generate the PWM output */
         FOCVars[M1].Iqdref = IqdRef;
       }
 
+      //计算虚拟速度传感器的速度值
       (void) VSS_CalcAvrgMecSpeedUnit( &VirtualSpeedSensorM1, &hForcedMecSpeedUnit );
 
-      /* check that startup stage where the observer has to be used has been reached */
+      /* check that startup stage where the observer has to be used has been reached 启动到了可以使用观测器的状态，可以使用滑膜观察器就可以使用闭环控制 */
       if (RUC_FirstAccelerationStageReached(&RevUpControlM1) == true)
       {
         ObserverConverged = STO_PLL_IsObserverConverged( &STO_PLL_M1,hForcedMecSpeedUnit );
         STO_SetDirection(&STO_PLL_M1, MCI_GetImposedMotorDirection( &Mci[M1]));
+        //将命令设置为从虚拟速度传感器启动转换阶段到其他速度传感器。
         (void) VSS_SetStartTransition( &VirtualSpeedSensorM1, ObserverConverged );
       }
 
-      if ( ObserverConverged )
+      if ( ObserverConverged )  //观测器是否收敛
       {
         qd_t StatorCurrent = MCM_Park( FOCVars[M1].Ialphabeta, SPD_GetElAngle( &STO_PLL_M1._Super ) );
 
-        /* Start switch over ramp. This ramp will transition from the revup to the closed loop FOC. */
+        /* Start switch over ramp. This ramp will transition from the revup to the closed loop FOC. 结束斜坡，加速转换成闭环的FOC */
         REMNG_Init( pREMNG[M1] );
         REMNG_ExecRamp( pREMNG[M1], FOCVars[M1].Iqdref.q, 0 );
         REMNG_ExecRamp( pREMNG[M1], StatorCurrent.q, TRANSITION_DURATION );
@@ -478,7 +480,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
       bool LoopClosed;
       int16_t hForcedMecSpeedUnit;
 
-      if( ! RUC_Exec( &RevUpControlM1 ) )
+      if( ! RUC_Exec( &RevUpControlM1 ) )  //进行加速过程
       {
           /* The time allowed for the startup sequence has expired */
           STM_FaultProcessing( &STM[M1], MC_START_UP, 0 );
@@ -486,7 +488,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
       else
       {
         /* Compute the virtual speed and positions of the rotor.
-           The function returns true if the virtual speed is in the reliability range */
+           The function returns true if the virtual speed is in the reliability range 计算转子的虚拟速度和位置。 如果虚拟速度在可靠性范围内，则该函数返回 true */
         LoopClosed = VSS_CalcAvrgMecSpeedUnit(&VirtualSpeedSensorM1,&hForcedMecSpeedUnit);
         /* Check if the transition ramp has completed. */
         LoopClosed |= VSS_TransitionEnded( &VirtualSpeedSensorM1 );
@@ -520,7 +522,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     FOC_CalcCurrRef( M1 );
     STM_NextState( &STM[M1], RUN );
     STC_ForceSpeedReferenceToCurrentSpeed( pSTC[M1] ); /* Init the reference speed to current speed */
-    MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor */
+    MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor 斜坡起步后执行相关的命令，加减速等 */
   
 #else 
  /* only for sensor-less control */
@@ -534,7 +536,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
       STM_NextState( &STM[M1], RUN );
     }
     STC_ForceSpeedReferenceToCurrentSpeed( pSTC[M1] ); /* Init the reference speed to current speed */
-    MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor */
+    MCI_ExecBufferedCommands( oMCInterface[M1] ); /* Exec the speed ramp after changing of the speed sensor 斜坡起步后执行相关的命令，加减速等 */
 #endif  
 //---Add end---// 
     break;
@@ -579,7 +581,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     /* USER CODE END MediumFrequencyTask M1 2 */
 
     MCI_ExecBufferedCommands( oMCInterface[M1] );
-    FOC_CalcCurrRef( M1 );
+    FOC_CalcCurrRef( M1 );  //计算Iq电流值
 
 #ifndef ABS_ENCODER_MODE
     if( !IsSpeedReliable )
@@ -910,21 +912,21 @@ inline uint16_t FOC_CurrControllerM1(void)
   SpeednPosFdbk_Handle_t *speedHandle;
 
   speedHandle = STC_GetSpeedSensor(pSTC[M1]);
-  hElAngle = SPD_GetElAngle(speedHandle);
+  hElAngle = SPD_GetElAngle(speedHandle);  //得到电角度
   hElAngle += SPD_GetInstElSpeedDpp(speedHandle)*PARK_ANGLE_COMPENSATION_FACTOR;
-  PWMC_GetPhaseCurrents(pwmcHandle[M1], &Iab);
-  Ialphabeta = MCM_Clarke(Iab);
-  Iqd = MCM_Park(Ialphabeta, hElAngle);
+  PWMC_GetPhaseCurrents(pwmcHandle[M1], &Iab);  //得到电流
+  Ialphabeta = MCM_Clarke(Iab);  //Clarke变换
+  Iqd = MCM_Park(Ialphabeta, hElAngle);  //Park变换
   Vqd.q = PI_Controller(pPIDIq[M1],
-            (int32_t)(FOCVars[M1].Iqdref.q) - Iqd.q);
+            (int32_t)(FOCVars[M1].Iqdref.q) - Iqd.q);  //Iq PI控制环
 
   Vqd.d = PI_Controller(pPIDId[M1],
-            (int32_t)(FOCVars[M1].Iqdref.d) - Iqd.d);
+            (int32_t)(FOCVars[M1].Iqdref.d) - Iqd.d);  //Id PI控制环
 
-  Vqd = Circle_Limitation(pCLM[M1], Vqd);
+  Vqd = Circle_Limitation(pCLM[M1], Vqd);  //模1限制
   hElAngle += SPD_GetInstElSpeedDpp(speedHandle)*REV_PARK_ANGLE_COMPENSATION_FACTOR;
-  Valphabeta = MCM_Rev_Park(Vqd, hElAngle);
-  hCodeError = PWMC_SetPhaseVoltage(pwmcHandle[M1], Valphabeta);
+  Valphabeta = MCM_Rev_Park(Vqd, hElAngle);  //反Park变换
+  hCodeError = PWMC_SetPhaseVoltage(pwmcHandle[M1], Valphabeta);  //设置相电压---相当于反Clarke变换
   FOCVars[M1].Vqd = Vqd;
   FOCVars[M1].Iab = Iab;
   FOCVars[M1].Ialphabeta = Ialphabeta;
