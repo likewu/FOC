@@ -348,8 +348,9 @@ __weak void TSK_MediumFrequencyTaskM1(void)
   State_t StateM1;
   int16_t wAux = 0;
 
+  //检测速度是不是可靠，如果不可靠后续运行时需要错误处理
   bool IsSpeedReliable ;//= STO_PLL_CalcAvrgMecSpeedUnit( &STO_PLL_M1, &wAux );
-  PQD_CalcElMotorPower( pMPM[M1] );  //检测速度是不是可靠，如果不可靠后续运行时需要错误处理
+  PQD_CalcElMotorPower( pMPM[M1] );
 
   //---Ken An add---//
   /* Calculate average speed in 0.1Hz, Also read angle from abs encoder */
