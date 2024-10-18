@@ -388,7 +388,7 @@ __weak void TSK_MediumFrequencyTaskM1(void)
     break;
 
   case OFFSET_CALIB:
-    if ( PWMC_CurrentReadingCalibr( pwmcHandle[M1], CRC_EXEC ) )
+    if ( PWMC_CurrentReadingCalibr( pwmcHandle[M1], CRC_EXEC ) )  //通过读取没有电流时的电流值电压值作为校准，每次启动都需要调用。
     {
       STM_NextState( &STM[M1], CLEAR );
     }
