@@ -55,7 +55,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void CAN_Send(CAN_TxHeaderTypeDef* pHeader, uint8_t* data);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
