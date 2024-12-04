@@ -1323,5 +1323,121 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* hpcd)
 }
 
 /* USER CODE BEGIN 1 */
+float AdcGetChipTemperature()
+{
+    float tempVal = TEMPSENSOR_CAL1_TEMP +
+                    (float) (adc1ValBuf[ADC_CHANNEL_TEMP] - *(__IO uint16_t *) (TEMPSENSOR_CAL1_ADDR))
+                    * (TEMPSENSOR_CAL2_TEMP - TEMPSENSOR_CAL1_TEMP)
+                    / (float) (*(__IO uint16_t *) (TEMPSENSOR_CAL2_ADDR) - *(__IO uint16_t *) (TEMPSENSOR_CAL1_ADDR));
 
+    return tempVal;
+}
+
+
+float AdcGetVoltage(uint32_t _channel)
+{
+    uint8_t index = 0;
+    switch (_channel)
+    {
+        case ADC_CH1:
+            index = 0;
+            break;
+        case ADC_CH2:
+            index = 1;
+            break;
+        case ADC_CH3:
+            index = 2;
+            break;
+        case ADC_CH4:
+            index = 3;
+            break;
+        default:
+            index = 0;
+    }
+
+    float val = (float) adc1ValBuf[ADC_CHANNEL_REF] / (float) (*(__IO uint16_t *) (VREFINT_CAL_ADDR))
+                * (float) adc1ValBuf[index] / 4095
+                * 3.3f;
+
+    return val;
+}
+
+uint16_t AdcGetRaw(uint32_t _channel)
+{
+    uint8_t index = 0;
+    switch (_channel)
+    {
+        case ADC_CH1:
+            index = 0;
+            break;
+        case ADC_CH2:
+            index = 1;
+            break;
+        case ADC_CH3:
+            index = 2;
+            break;
+        case ADC_CH4:
+            index = 3;
+            break;
+        default:
+            index = 0;
+    }
+
+    return adc1ValBuf[index];
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance->SR & 0x01) // count overflow
+    {
+        if (htim->Instance->CR1 & 0x10) // count up
+        {
+            if (htim->Instance == TIM2)
+                encCntLoop[0]--;
+            else if (htim->Instance == TIM3)
+                encCntLoop[1]--;
+        } else                          // count down
+        {
+            if (htim->Instance == TIM2)
+                encCntLoop[0]++;
+            else if (htim->Instance == TIM3)
+                encCntLoop[1]++;
+        }
+
+        htim->Instance->SR = htim->Instance->SR & 0xFE; // clear flag
+    }
+}
+
+int64_t GetCntLoop(TIM_TypeDef *tim)
+{
+    if (tim == TIM2)
+    {
+        return encCntLoop[0];
+    } else if (tim == TIM3)
+    {
+        return encCntLoop[1];
+    }
+}
+
+void ClearCntLoop(TIM_TypeDef *tim)
+{
+    if (tim == TIM2)
+    {
+        encCntLoop[0] = 0;
+    } else if (tim == TIM3)
+    {
+        encCntLoop[1] = 0;
+    }
+}
+
+int64_t GetEncoderCount(TIM_TypeDef *tim)
+{
+    if (tim == TIM2)
+    {
+        return encCntLoop[0] * 65536 + TIM2->CNT;
+    } else if (tim == TIM3)
+    {
+        return encCntLoop[1] * 65536 + TIM3->CNT;
+    }
+}
 /* USER CODE END 1 */

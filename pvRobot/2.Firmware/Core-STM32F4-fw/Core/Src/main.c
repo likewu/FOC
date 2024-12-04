@@ -22,7 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "common_inc.h"
+#include "communication.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,6 +33,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+// List of semaphores
+osSemaphoreId sem_usb_irq;
+osSemaphoreId sem_uart4_dma;
+osSemaphoreId sem_uart5_dma;
+osSemaphoreId sem_usb_rx;
+osSemaphoreId sem_usb_tx;
+osSemaphoreId sem_can1_tx;
+osSemaphoreId sem_can2_tx;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -81,7 +90,9 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
-
+uint64_t serialNumber;
+char serialNumberStr[13];
+__attribute__((section(".ccmram"))) uint8_t ucHeap[configTOTAL_HEAP_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -112,7 +123,7 @@ static void MX_TIM14_Init(void);
 void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
-
+extern void MX_USB_DEVICE_Init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -127,7 +138,22 @@ void StartDefaultTask(void *argument);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  // This procedure of building a USB serial number should be identical
+  // to the way the STM's built-in USB bootloader does it. This means
+  // that the device will have the same serial number in normal and DFU mode.
+  uint32_t uuid0 = *(uint32_t *) (UID_BASE + 0);
+  uint32_t uuid1 = *(uint32_t *) (UID_BASE + 4);
+  uint32_t uuid2 = *(uint32_t *) (UID_BASE + 8);
+  uint32_t uuid_mixed_part = uuid0 + uuid2;
+  serialNumber = ((uint64_t) uuid_mixed_part << 16) | (uint64_t) (uuid1 >> 16);
 
+  uint64_t val = serialNumber;
+  for (size_t i = 0; i < 12; ++i)
+  {
+      serialNumberStr[i] = "0123456789ABCDEF"[(val >> (48 - 4)) & 0xf];
+      val <<= 4;
+  }
+  serialNumberStr[12] = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -182,7 +208,29 @@ int main(void)
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
+  // Init usb irq binary semaphore, and start with no tokens by removing the starting one.
+  osSemaphoreDef(sem_usb_irq);
+  sem_usb_irq = osSemaphoreNew(1, 0, osSemaphore(sem_usb_irq));
+
+  // Create a semaphore for UART DMA and remove a token
+  osSemaphoreDef(sem_uart4_dma);
+  sem_uart4_dma = osSemaphoreNew(1, 1, osSemaphore(sem_uart4_dma));
+  osSemaphoreDef(sem_uart5_dma);
+  sem_uart5_dma = osSemaphoreNew(1, 1, osSemaphore(sem_uart5_dma));
+
+  // Create a semaphore for USB RX, and start with no tokens by removing the starting one.
+  osSemaphoreDef(sem_usb_rx);
+  sem_usb_rx = osSemaphoreNew(1, 0, osSemaphore(sem_usb_rx));
+
+  // Create a semaphore for USB TX
+  osSemaphoreDef(sem_usb_tx);
+  sem_usb_tx = osSemaphoreNew(1, 1, osSemaphore(sem_usb_tx));
+
+  // Create a semaphore for CAN TX
+  osSemaphoreDef(sem_can1_tx);
+  sem_can1_tx = osSemaphoreNew(1, 1, osSemaphore(sem_can1_tx));
+  osSemaphoreDef(sem_can2_tx);
+  sem_can2_tx = osSemaphoreNew(1, 1, osSemaphore(sem_can2_tx));
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -659,7 +707,8 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM2_Init 2 */
-
+  TIM2->CNT = 0;
+  TIM2->SR = TIM2->SR & 0xFE; // clear flag
   /* USER CODE END TIM2_Init 2 */
 
 }
@@ -708,7 +757,8 @@ static void MX_TIM3_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM3_Init 2 */
-
+  TIM3->CNT = 0;
+  TIM3->SR = TIM3->SR & 0xFE; // clear flag
   /* USER CODE END TIM3_Init 2 */
 
 }
@@ -1161,6 +1211,11 @@ void OnTimerCallback(TIM_TypeDef *timInstance);
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  MX_USB_DEVICE_Init();
+
+  // Invoke cpp-version main().
+  Main();
+
   /* Infinite loop */
   for(;;)
   {
@@ -1186,7 +1241,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  else
+  {
+      OnTimerCallback(htim->Instance);
+  }
   /* USER CODE END Callback 1 */
 }
 
