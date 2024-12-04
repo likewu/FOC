@@ -7,9 +7,6 @@ extern "C" {
 
 //引用端口定义
 #include "main.h"
-#include "gpio.h"
-#include "spi.h"
-#include "tim.h"
 //应用存储配置
 #include "stockpile_config.h"
 

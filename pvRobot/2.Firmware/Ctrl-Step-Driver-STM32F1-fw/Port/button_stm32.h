@@ -1,7 +1,7 @@
 #ifndef CTRL_STEP_FW_BUTTON_STM32_H
 #define CTRL_STEP_FW_BUTTON_STM32_H
 
-#include "button_base.h"
+#include "Signal/button_base.h"
 
 class Button : public ButtonBase
 {

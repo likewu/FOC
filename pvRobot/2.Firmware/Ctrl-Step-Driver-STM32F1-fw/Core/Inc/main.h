@@ -56,6 +56,14 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 void CAN_Send(CAN_TxHeaderTypeDef* pHeader, uint8_t* data);
+
+extern void (*OnRecvEnd)(uint8_t *data, uint16_t len);
+void Uart_SetRxCpltCallBack(void(*xerc)(uint8_t *, uint16_t));
+
+extern void MX_TIM1_Init(void);
+extern void MX_TIM2_Init(void);
+extern void MX_TIM3_Init(void);
+extern void MX_TIM4_Init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -93,6 +101,28 @@ void CAN_Send(CAN_TxHeaderTypeDef* pHeader, uint8_t* data);
 #define BUTTON1_GPIO_Port GPIOB
 #define SPI1_CS_Pin GPIO_PIN_15
 #define SPI1_CS_GPIO_Port GPIOA
+
+extern CAN_HandleTypeDef hcan;
+extern CAN_TxHeaderTypeDef TxHeader;
+extern CAN_RxHeaderTypeDef RxHeader;
+extern uint8_t TxData[8];
+extern uint8_t RxData[8];
+extern uint32_t TxMailbox;
+
+extern uint16_t whole_adc_data[2][12];
+
+#define BUFFER_SIZE  128
+
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
+extern volatile uint8_t rxLen;
+extern volatile uint8_t recv_end_flag;
+extern uint8_t rx_buffer[BUFFER_SIZE];
+
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

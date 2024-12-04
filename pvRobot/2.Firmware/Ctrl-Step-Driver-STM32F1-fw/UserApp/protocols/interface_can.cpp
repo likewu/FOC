@@ -1,6 +1,6 @@
 #include "common_inc.h"
 #include "configurations.h"
-#include <can.h>
+#include <main.h>
 
 
 extern Motor motor;

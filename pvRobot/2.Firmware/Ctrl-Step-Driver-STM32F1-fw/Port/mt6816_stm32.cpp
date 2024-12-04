@@ -1,5 +1,5 @@
 #include "mt6816_stm32.h"
-#include "spi.h"
+#include "main.h"
 
 void MT6816::SpiInit()
 {

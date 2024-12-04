@@ -1,7 +1,7 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <Platform/retarget.h>
-#include "usart.h"
+#include "main.h"
 
 #if !defined(OS_USE_SEMIHOSTING)
 

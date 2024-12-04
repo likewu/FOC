@@ -1,5 +1,5 @@
 #include "tb67h450_stm32.h"
-#include "tim.h"
+#include "main.h"
 
 void TB67H450::InitGpio()
 {

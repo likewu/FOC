@@ -1,7 +1,7 @@
 #include "common_inc.h"
 #include "configurations.h"
 #include "Platform/Utils/st_hardware.h"
-#include <tim.h>
+#include <main.h>
 
 
 /* Component Definitions -----------------------------------------------------*/
