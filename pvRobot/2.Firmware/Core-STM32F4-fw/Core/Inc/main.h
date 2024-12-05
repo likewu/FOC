@@ -36,7 +36,28 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+extern CAN_HandleTypeDef hcan1;
+extern CAN_HandleTypeDef hcan2;
 
+extern I2C_HandleTypeDef hi2c1;
+
+extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim9;
+extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim11;
+extern TIM_HandleTypeDef htim12;
+extern TIM_HandleTypeDef htim13;
+extern TIM_HandleTypeDef htim14;
+
+#define ADC_CH1 ADC_CHANNEL_12
+#define ADC_CH2 ADC_CHANNEL_13
+#define ADC_CH3 ADC_CHANNEL_14
+#define ADC_CH4 ADC_CHANNEL_15
+
+
+#define ADC_CHANNEL_REF 5
+#define ADC_CHANNEL_TEMP 4
+extern uint16_t adc1ValBuf[ADC_CHANNEL_REF + 1];
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

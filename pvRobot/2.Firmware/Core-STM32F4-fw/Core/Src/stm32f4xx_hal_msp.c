@@ -50,7 +50,7 @@ extern DMA_HandleTypeDef hdma_uart5_tx;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+volatile int64_t encCntLoop[2];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

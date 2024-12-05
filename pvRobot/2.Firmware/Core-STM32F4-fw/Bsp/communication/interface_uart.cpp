@@ -2,7 +2,7 @@
 #include "interface_uart.hpp"
 #include "ascii_processor.hpp"
 #include "fibre/protocol.hpp"
-#include "usart.h"
+#include "main.h"
 
 #define UART_TX_BUFFER_SIZE 64
 #define UART_RX_BUFFER_SIZE 64
