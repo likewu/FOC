@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "stm32f4xx_hal.h"
-#include "i2c.h"
+#include "main.h"
 
 #define true 1
 #define false 0

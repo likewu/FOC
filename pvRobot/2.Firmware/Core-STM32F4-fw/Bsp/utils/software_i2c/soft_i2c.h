@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "stm32f4xx_hal.h"
-#include "gpio.h"
+#include "main.h"
 
 #define CPU_FREQUENCY_MHZ   0 //4
 #define MYI2C_SCL_PIN        GPIO_PIN_10

@@ -3,7 +3,7 @@
 
 #include "sca_api.h"
 #include "fibre/protocol.hpp"
-#include <can.h>
+#include <main.h>
 
 class SCA
 {
@@ -31,7 +31,7 @@ public:
     void LookupActuators();
     void SetupActuators();
 
-    /***************¿ØÖÆÏà¹Ø******************/
+    /***************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½******************/
     void Homing();
     void ResetController();
     void RegainAttributes();
@@ -46,7 +46,7 @@ public:
     bool ClearError();
     bool SaveAllParams();
 
-    /***************Î»ÖÃÏà¹Ø******************/
+    /***************Î»ï¿½ï¿½ï¿½ï¿½ï¿½******************/
     void SetPosition(float _pos);
     float GetPosition();
     void SetPositionKp(float _kp);
@@ -78,7 +78,7 @@ public:
     uint8_t SetProfilePositionMaxVelocity(float _maxVelocity);
     float GetProfilePositionMaxVelocity();
 
-    /***************ËÙ¶ÈÏà¹Ø******************/
+    /***************ï¿½Ù¶ï¿½ï¿½ï¿½ï¿½******************/
     void SetVelocity(float _vel);
     float GetVelocity();
     uint8_t GetVelocityKp();
@@ -103,7 +103,7 @@ public:
     uint8_t GetProfileVelocityMaxVelocity();
     float GetVelocityRange();
 
-    /***************µçÁ÷Ïà¹Ø******************/
+    /***************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½******************/
     uint8_t SetCurrent(float _current);
     uint8_t GetCurrent();
     uint8_t GetCurrentKp();
@@ -116,7 +116,7 @@ public:
     uint8_t SetCurrentLimit(float _limit);
     uint8_t GetCurrentLimit();
 
-    /***************ÆäËû²ÎÊý******************/
+    /***************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½******************/
     uint8_t GetVoltage();
     uint8_t GetLockEnergy();
     uint8_t SetLockEnergy(float _energy);

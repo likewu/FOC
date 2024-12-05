@@ -2,7 +2,7 @@
 #define DUMMY_CORE_FW_CTRL_STEP_HPP
 
 #include "fibre/protocol.hpp"
-#include "can.h"
+#include "main.h"
 
 class CtrlStepMotor
 {

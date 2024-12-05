@@ -1,4 +1,4 @@
-#include "communication.hpp"
+#include "communication/communication.hpp"
 #include "dummy_robot.h"
 
 inline float AbsMaxOf6(DOF6Kinematic::Joint6D_t _joints, uint8_t &_index)

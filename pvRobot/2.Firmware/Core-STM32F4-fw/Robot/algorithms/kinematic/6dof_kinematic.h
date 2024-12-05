@@ -2,7 +2,7 @@
 #define DOF6_KINEMATIC_SOLVER_H
 
 #include "stm32f405xx.h"
-#include "arm_math.h"
+#include "utils/arm_math/arm_math.h"
 #include "memory.h"
 
 class DOF6Kinematic

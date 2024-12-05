@@ -14,8 +14,7 @@ extern "C" {
 #include "main.h"
 #include "cmsis_os.h"
 #include "freertos_inc.h"
-#include "main.h"
-#include "time_utils.h"
+#include "utils/time_utils.h"
 
 void Main(void);
 
@@ -27,14 +26,14 @@ extern char serialNumberStr[13];
 }
 
 /*---------------------------- C++ Scope ---------------------------*/
-#include "communication.hpp"
-#include "eeprom_interface.h"
+#include "communication/communication.hpp"
+#include "memory/eeprom_interface.h"
 #include "U8g2lib.hpp"
-#include "MPU6050.hpp"
-#include "encoder.hpp"
-#include "analog.hpp"
-#include "pwm.hpp"
-#include "timer.hpp"
+#include "imu/MPU6050.hpp"
+#include "gpio/encoder.hpp"
+#include "gpio/analog.hpp"
+#include "gpio/pwm.hpp"
+#include "gpio/timer.hpp"
 #include "actuators/mintasca/sca.hpp"
 #include "actuators/ctrl_step/ctrl_step.hpp"
 #include "instances/dummy_robot.h"
