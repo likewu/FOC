@@ -14,8 +14,7 @@ extern "C" {
 #include "main.h"
 #include "cmsis_os.h"
 #include "freertos_inc.h"
-#include "adc.h"
-#include "tim.h"
+#include "main.h"
 #include "time_utils.h"
 
 void Main(void);
