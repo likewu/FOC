@@ -12,6 +12,7 @@ see protocol.md for the protocol specification
 #include <limits>
 #include <cmath>
 //#include <stdint.h>
+#include <cstdio>
 #include <string.h>
 #include "crc.hpp"
 #include "cpp_utils.hpp"

@@ -2,7 +2,7 @@
 #define REF_STM32F4_PWM_H
 
 #include <cstdint>
-#include <tim.h>
+#include <main.h>
 
 class PWM
 {

@@ -38,7 +38,7 @@ THE SOFTWARE.
 #define _MPU6050_H_
 
 #include "i2c_dev.hpp"
-#include "biquad_filter.h"
+#include "imu/filters/biquad_filter.h"
 
 // supporting link:  http://forum.arduino.cc/index.php?&topic=143444.msg1079517#msg1079517
 // also: http://forum.arduino.cc/index.php?&topic=141571.msg1062899#msg1062899s

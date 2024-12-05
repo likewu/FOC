@@ -2,7 +2,7 @@
 #define REF_STM32F4_ENCODER_HPP
 
 #include <fibre/protocol.hpp>
-#include "tim.h"
+#include "main.h"
 
 class Encoder
 {

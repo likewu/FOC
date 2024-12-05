@@ -1,5 +1,5 @@
 #include "ctrl_step.hpp"
-#include "communication.hpp"
+#include "communication/communication.hpp"
 
 
 CtrlStepMotor::CtrlStepMotor(CAN_HandleTypeDef* _hcan, uint8_t _id, bool _inverse,

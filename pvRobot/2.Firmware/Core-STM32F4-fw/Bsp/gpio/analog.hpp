@@ -2,7 +2,7 @@
 #define REF_STM32F4_ANALOG_H
 
 #include <cstdint>
-#include <adc.h>
+#include <main.h>
 
 class Analog
 {

@@ -2,7 +2,7 @@
 #define REF_STM32F4_TIMER_HPP
 
 #include <cmath>
-#include "tim.h"
+#include "main.h"
 
 typedef void (*TimerCallback_t)();
 

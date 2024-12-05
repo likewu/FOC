@@ -33,7 +33,7 @@ extern char serialNumberStr[13];
 #include "gpio/encoder.hpp"
 #include "gpio/analog.hpp"
 #include "gpio/pwm.hpp"
-#include "gpio/timer.hpp"
+#include "utils/timer.hpp"
 #include "actuators/mintasca/sca.hpp"
 #include "actuators/ctrl_step/ctrl_step.hpp"
 #include "instances/dummy_robot.h"

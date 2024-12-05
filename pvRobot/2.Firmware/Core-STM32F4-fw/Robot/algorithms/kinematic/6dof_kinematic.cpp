@@ -1,4 +1,5 @@
 #include "6dof_kinematic.h"
+#include <cmath>
 
 inline float cosf(float x)
 {
