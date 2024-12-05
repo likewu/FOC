@@ -1,9 +1,10 @@
 #include "mt6816_stm32.h"
 #include "main.h"
+#include "stm32f1xx_hal_def.h"
 
 void MT6816::SpiInit()
 {
-    MX_SPI1_Init();
+    //MX_SPI1_Init();
 }
 
 uint16_t MT6816::SpiTransmitAndRead16Bits(uint16_t _dataTx)

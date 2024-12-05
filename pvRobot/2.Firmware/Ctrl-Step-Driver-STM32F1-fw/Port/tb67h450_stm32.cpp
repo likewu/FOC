@@ -24,7 +24,7 @@ void TB67H450::InitGpio()
 
 void TB67H450::InitPwm()
 {
-    MX_TIM2_Init();
+    //MX_TIM2_Init();
 }
 
 

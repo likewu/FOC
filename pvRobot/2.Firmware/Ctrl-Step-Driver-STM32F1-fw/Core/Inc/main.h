@@ -60,10 +60,11 @@ void CAN_Send(CAN_TxHeaderTypeDef* pHeader, uint8_t* data);
 extern void (*OnRecvEnd)(uint8_t *data, uint16_t len);
 void Uart_SetRxCpltCallBack(void(*xerc)(uint8_t *, uint16_t));
 
-extern void MX_TIM1_Init(void);
-extern void MX_TIM2_Init(void);
-extern void MX_TIM3_Init(void);
-extern void MX_TIM4_Init(void);
+//static void MX_TIM1_Init(void);
+//static void MX_TIM2_Init(void);
+//static void MX_TIM3_Init(void);
+//static void MX_TIM4_Init(void);
+//static void MX_SPI1_Init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -110,6 +111,8 @@ extern uint8_t RxData[8];
 extern uint32_t TxMailbox;
 
 extern uint16_t whole_adc_data[2][12];
+
+extern SPI_HandleTypeDef hspi1;
 
 #define BUFFER_SIZE  128
 

@@ -46,7 +46,9 @@ extern DMA_HandleTypeDef hdma_usart1_tx;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+volatile uint8_t rxLen = 0;
+uint8_t rx_buffer[BUFFER_SIZE] = {0};
+void (* OnRecvEnd)(uint8_t* data, uint16_t len);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

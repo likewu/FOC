@@ -20,14 +20,14 @@ void RetargetInit(UART_HandleTypeDef *huart)
     setvbuf(stdout, NULL, _IONBF, 0);
 }
 
-int _isatty(int fd)
+/*int _isatty(int fd)
 {
     if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
         return 1;
 
     errno = EBADF;
     return 0;
-}
+}*/
 
 int _write(int fd, char *ptr, int len)
 {
@@ -40,7 +40,7 @@ int _write(int fd, char *ptr, int len)
         return -1;
 }
 
-int _close(int fd)
+/*int _close(int fd)
 {
     if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
         return 0;
@@ -57,7 +57,7 @@ int _lseek(int fd, int ptr, int dir)
 
     errno = EBADF;
     return -1;
-}
+}*/
 
 int _read(int fd, char *ptr, int len)
 {
@@ -75,7 +75,7 @@ int _read(int fd, char *ptr, int len)
     return -1;
 }
 
-int _fstat(int fd, struct stat *st)
+/*int _fstat(int fd, struct stat *st)
 {
     if (fd >= STDIN_FILENO && fd <= STDERR_FILENO)
     {
@@ -85,6 +85,6 @@ int _fstat(int fd, struct stat *st)
 
     errno = EBADF;
     return 0;
-}
+}*/
 
 #endif //#if !defined(OS_USE_SEMIHOSTING)
