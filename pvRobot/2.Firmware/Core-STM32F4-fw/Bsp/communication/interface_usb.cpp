@@ -31,7 +31,7 @@ public:
         }
 
         // transmit packet
-        uint8_t status = CDC_Transmit_FS(const_cast<uint8_t *>(buffer), length, endpoint_pair_);
+        uint8_t status = CDC_Transmit_FS(const_cast<uint8_t *>(buffer), length);
         if (status != USBD_OK)
         {
             osSemaphoreRelease(sem_usb_tx_);
@@ -138,7 +138,7 @@ static void UsbServerTask(void *ctx)
                 CDC_interface.data_pending = false;
 
                 ASCII_protocol_parse_stream(CDC_interface.rx_buf, CDC_interface.rx_len, usb_stream_output);
-                USBD_CDC_ReceivePacket(&hUsbDeviceFS, CDC_interface.out_ep);  // Allow next packet
+                USBD_CDC_ReceivePacket(&hUsbDeviceFS);  // Allow next packet
             }
 
             // Native Interface
@@ -146,7 +146,7 @@ static void UsbServerTask(void *ctx)
             {
                 ODrive_interface.data_pending = false;
                 usb_channel.process_packet(ODrive_interface.rx_buf, ODrive_interface.rx_len);
-                USBD_CDC_ReceivePacket(&hUsbDeviceFS, ODrive_interface.out_ep);  // Allow next packet
+                USBD_CDC_ReceivePacket(&hUsbDeviceFS);  // Allow next packet
             }
         }
     }

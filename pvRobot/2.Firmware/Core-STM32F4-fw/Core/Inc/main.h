@@ -49,6 +49,9 @@ extern TIM_HandleTypeDef htim12;
 extern TIM_HandleTypeDef htim13;
 extern TIM_HandleTypeDef htim14;
 
+extern UART_HandleTypeDef huart4;
+extern UART_HandleTypeDef huart5;
+
 #define ADC_CH1 ADC_CHANNEL_12
 #define ADC_CH2 ADC_CHANNEL_13
 #define ADC_CH3 ADC_CHANNEL_14

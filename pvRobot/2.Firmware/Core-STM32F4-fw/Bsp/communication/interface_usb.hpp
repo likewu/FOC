@@ -22,6 +22,9 @@ typedef struct
 
 extern USBStats_t usb_stats_;
 
+#define ODRIVE_IN_EP                                0x83  /* EP3 IN: ODrive device TX endpoint */
+#define ODRIVE_OUT_EP                               0x03  /* EP3 OUT: ODrive device RX endpoint */
+
 void usb_rx_process_packet(uint8_t *buf, uint32_t len, uint8_t endpoint_pair);
 void StartUsbServer(void);
 

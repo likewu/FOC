@@ -141,6 +141,8 @@ static inline T read_le(const uint8_t **buffer, size_t *length)
 class PacketSink
 {
 public:
+    //virtual PacketSink(StreamSink &output)=0;
+
     // @brief Get the maximum packet length (aka maximum transmission unit)
     // A packet size shall take no action and return an error code if the
     // caller attempts to send an oversized packet.
@@ -156,6 +158,8 @@ public:
 class StreamSink
 {
 public:
+    //virtual StreamSink(PacketSink &output)=0;
+
     enum ChannelType_t
     {
         CHANNEL_TYPE_USB,
