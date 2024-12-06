@@ -79,9 +79,9 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-float AdcGetChipTemperature();
-float AdcGetVoltage(uint32_t _channel);
-uint16_t AdcGetRaw(uint32_t _channel);
+extern float AdcGetChipTemperature();
+extern float AdcGetVoltage(uint32_t _channel);
+extern uint16_t AdcGetRaw(uint32_t _channel);
 
 int64_t GetEncoderCount(TIM_TypeDef *tim);
 int64_t GetCntLoop(TIM_TypeDef *tim);

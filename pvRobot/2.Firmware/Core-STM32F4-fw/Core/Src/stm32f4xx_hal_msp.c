@@ -51,11 +51,15 @@ extern DMA_HandleTypeDef hdma_uart5_tx;
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 volatile int64_t encCntLoop[2];
+
+uint16_t adc1ValBuf[ADC_CHANNEL_REF + 1] = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+float AdcGetChipTemperature();
+float AdcGetVoltage(uint32_t _channel);
+uint16_t AdcGetRaw(uint32_t _channel);
 /* USER CODE END PFP */
 
 /* External functions --------------------------------------------------------*/

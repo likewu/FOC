@@ -210,7 +210,7 @@ public:
     {
     };
 
-    int process_bytes(const uint8_t *buffer, size_t length, size_t *processed_bytes);
+    int process_bytes(const uint8_t *buffer, size_t length, size_t *processed_bytes) {}
 
     size_t get_free_space()
     { return SIZE_MAX; }
@@ -234,7 +234,7 @@ public:
     };
 
     //size_t get_mtu() { return SIZE_MAX; }
-    int process_packet(const uint8_t *buffer, size_t length);
+    int process_packet(const uint8_t *buffer, size_t length) {}
 
 private:
     StreamSink &output_;
@@ -597,7 +597,7 @@ public:
     //size_t get_mtu() {
     //    return SIZE_MAX;
     //}
-    int process_packet(const uint8_t *buffer, size_t length);
+    int process_packet(const uint8_t *buffer, size_t length) {}
 
 private:
     PacketSink &output_;
