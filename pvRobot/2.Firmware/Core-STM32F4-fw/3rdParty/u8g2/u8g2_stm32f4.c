@@ -1,7 +1,7 @@
 #include <cmsis_os.h>
 #include "stm32f4xx_hal.h"
 #include "u8g2.h"
-#include "soft_i2c.h"
+#include "utils/software_i2c/soft_i2c.h"
 
 #define DEVICE_ADDRESS    0x3C
 #define TX_TIMEOUT        100
