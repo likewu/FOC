@@ -1,0 +1,72 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.14.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 Acer, 1, LIC=9WSBS-L6NQD-ADIKK-ZW2ZX-JACND-0XDK3
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Standard  Version: 5.14.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.05 update 1 (build 106)
+Assembler:       Armasm.exe V5.05 update 1 (build 106)
+Linker/Locator:  ArmLink.exe V5.05 update 1 (build 106)
+Library Manager: ArmAr.exe V5.05 update 1 (build 106)
+Hex Converter:   FromElf.exe V5.05 update 1 (build 106)
+CPU DLL:         SARMCM3.DLL V5.14.0.0
+Dialog DLL:      DCM.DLL V1.13.1.0
+Target DLL:      Segger\JL2CM3.dll V2.99.13.0
+Dialog DLL:      TCM.DLL V1.14.4.0
+ 
+<h2>Project:</h2>
+C:\Users\Acer\Desktop\逆变代码\代码（可调幅频率40以下可调能采集最大最小电压）\Project\DCDC.uvprojx
+Project File Date:  08/07/2017
+
+<h2>Output:</h2>
+Build target 'Target 1'
+*** Error: Referred Memory Range 'ROM2' is undefined.
+compiling Bipolar_PWM.c...
+..\User\power.h(87): warning:  #1-D: last line of file ends without a newline
+  #endif 
+..\Source\qiankunLib\inc\qk_ft1505.h(24): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Source\qiankunLib\inc\qk_pwm.h(22): warning:  #1295-D: Deprecated declaration TIM8_Init - give arg types
+  void TIM8_Init();
+..\Source\qiankunLib\inc\qk_pwm.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\sample.h(5): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Source\qiankunLib\inc\qk_ir.h(33): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\Source\qiankunLib\inc\qk_menu.h(38): warning:  #1295-D: Deprecated declaration SetParameter - give arg types
+  void SetParameter();
+..\Source\qiankunLib\inc\qk_menu.h(40): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\Bipolar_PWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\power.h(80): warning:  #1295-D: Deprecated declaration Config - give arg types
+  void Config();
+..\User\power.h(87): warning:  #1-D: last line of file ends without a newline
+  #endif 
+..\User\Bipolar_PWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+..\User\Bipolar_PWM.c(97): warning:  #68-D: integer conversion resulted in a change of sign
+        if(iError<3000)iError=-3000;
+..\User\Bipolar_PWM.c(91): warning:  #177-D: variable "PID_result" was declared but never referenced
+        signed int PID_result;
+..\User\Bipolar_PWM.c: 14 warnings, 0 errors
+linking...
+Program Size: Code=31430 RO-data=319794 RW-data=624 ZI-data=13192  
+FromELF: creating hex file...
+"..\obj\DCDC.axf" - 0 Error(s), 14 Warning(s).
+
+<h2>Collection of Component include folders:</h2>
+  C:\Users\Acer\Desktop\逆变代码\代码（可调幅频率40以下可调能采集最大最小电压）\Project\RTE
+  C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0
+
+<h2>Collection of Component Files used:</h2>
+</pre>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "sensorcomm.h": "c",
+        "define.h": "c"
+    }
+}
