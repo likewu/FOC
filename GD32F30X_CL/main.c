@@ -61,12 +61,12 @@ void led_spark(void)
 
 int main(void)
 {
-	  uint32_t dummy = 0;
+	uint32_t dummy = 0;
     timer_parameter_struct timer_initpara;
     timer_oc_parameter_struct timer_ocintpara;
     timer_break_parameter_struct timer_bkdtpara;
 	
-	  uint32_t i;
+	uint32_t i;
 	
     /* configure systick */
     systick_config();
@@ -78,18 +78,18 @@ int main(void)
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_GPIOB);
     rcu_periph_clock_enable(RCU_GPIOC);
-		rcu_periph_clock_enable(RCU_AF);
+	rcu_periph_clock_enable(RCU_AF);
     rcu_periph_clock_enable(RCU_TIMERxx);
     rcu_periph_clock_enable(RCU_ADC0);
     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV2);
-		
-		//AFIO_PCF0|=1<<2;  //UART0 PB6 PB7
+
+	//AFIO_PCF0|=1<<2;  //UART0 PB6 PB7
     //gpio_pin_remap_config(GPIO_USART0_REMAP, ENABLE);  //UART0 PB6 PB7
     //gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
     //gpio_init(GPIOB, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
     gd_eval_com_init(EVAL_COM1);  //PA9 PA10
-		
-		/* print out the clock frequency of system, AHB, APB1 and APB2 */
+
+	/* print out the clock frequency of system, AHB, APB1 and APB2 */
     printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
     printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
     printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
@@ -97,17 +97,17 @@ int main(void)
     
     /************************************* step1: GPIO配置 *******************************************/
     /* 配置6路PWM的IO */
-		//gpio_pin_remap_config(GPIO_TIMER0_PARTIAL_REMAP, ENABLE);
+	//gpio_pin_remap_config(GPIO_TIMER0_PARTIAL_REMAP, ENABLE);
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_11);
     //gpio_init(GPIOE, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_13);
-		gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+	gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
     gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
     gpio_init(GPIOC, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_8);
-		
-		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
-		gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
-		gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
+
+	gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_6);
+	gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
+	gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
 
     /* 驱动使能 */
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5);
@@ -122,7 +122,7 @@ int main(void)
     timer_deinit(TIMERxx);
     timer_initpara.prescaler = 2;//PWM_PRSC;
     timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
-		timer_initpara.counterdirection = TIMER_COUNTER_UP;
+	timer_initpara.counterdirection = TIMER_COUNTER_UP;
     timer_initpara.period = 1199;//HALF_PWM_PERIOD;          /* 配置三相桥开关频率 */
     timer_initpara.clockdivision = TIMER_CKDIV_DIV1;  /* 死区时间计算用到的分频 */
     timer_initpara.repetitioncounter = 1;                /* 重复计数器, 影响更新事件的频率 */
@@ -185,7 +185,7 @@ int main(void)
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_0, TIMER_CCXN_DISABLE);
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_1, TIMER_CCXN_DISABLE);
     timer_channel_complementary_output_state_config(TIMERxx, TIMER_CH_2, TIMER_CCXN_DISABLE);
-    
+
     //timer_update_source_config(TIMERxx, TIMER_UPDATE_SRC_REGULAR);
     //timer_single_pulse_mode_config(TIMERxx, TIMER_SP_MODE_REPETITIVE);
     timer_primary_output_config(TIMERxx, ENABLE);
@@ -200,7 +200,7 @@ int main(void)
     adc_special_function_config(ADC0, ADC_CONTINUOUS_MODE, DISABLE);
     adc_external_trigger_source_config(ADC0, ADC_REGULAR_CHANNEL, ADC0_1_2_EXTTRIG_REGULAR_NONE); 
     adc_data_alignment_config(ADC0, ADC_DATAALIGN_RIGHT);
-    
+
     /* 注入组配置 */
     /*adc_channel_length_config(ADC0, ADC_INSERTED_CHANNEL, 2);
     adc_inserted_channel_config(ADC0, 0, ADC_CHANNEL_1, ADC_SAMPLETIME_7POINT5);         // A相电流
@@ -216,29 +216,29 @@ int main(void)
     adc_interrupt_enable(ADC0, ADC_INT_EOIC);
     nvic_irq_enable(ADC0_1_IRQn, ADC_PRE_PRIORITY, ADC_SUB_PRIORITY);
     */
-		
+
     TIMER_CHCTL2(TIMERxx)|=0x0111;
-		TIMER_CH0CV(TIMERxx)=500;
-		TIMER_CH1CV(TIMERxx)=500;
-		TIMER_CH2CV(TIMERxx)=500;
+	TIMER_CH0CV(TIMERxx)=500;
+	TIMER_CH1CV(TIMERxx)=500;
+	TIMER_CH2CV(TIMERxx)=500;
     while(1) {
-			for (i=0;i<rate+1;i=i+8){
-				TIMER_CH0CV(TIMERxx)=i;
-				TIMER_CH1CV(TIMERxx)=rate-i;
-				TIMER_CH2CV(TIMERxx)=rate-i;
-				if (i%12==0)
-				  gd_eval_led_toggle(LED1);
-				delay_1ms(25);
-			}
-			for (i=rate+1;i>0;i=i-8){
-				TIMER_CH0CV(TIMERxx)=i-1;
-				TIMER_CH1CV(TIMERxx)=rate-i+1;
-				TIMER_CH2CV(TIMERxx)=rate-i+1;
-				if (i%12==0)
-				  gd_eval_led_toggle(LED1);
-				delay_1ms(25);
-			}
-			
+		for (i=0;i<rate+1;i=i+8){
+			TIMER_CH0CV(TIMERxx)=i;
+			TIMER_CH1CV(TIMERxx)=rate-i;
+			TIMER_CH2CV(TIMERxx)=rate-i;
+			if (i%12==0)
+			  gd_eval_led_toggle(LED1);
+			delay_1ms(25);
+		}
+		for (i=rate+1;i>0;i=i-8){
+			TIMER_CH0CV(TIMERxx)=i-1;
+			TIMER_CH1CV(TIMERxx)=rate-i+1;
+			TIMER_CH2CV(TIMERxx)=rate-i+1;
+			if (i%12==0)
+			  gd_eval_led_toggle(LED1);
+			delay_1ms(25);
+		}
+
         //if(RESET == gd_eval_key_state_get(KEY_WAKEUP)) {
             //gd_eval_led_on(LED1);
             //delay_1ms(500);
